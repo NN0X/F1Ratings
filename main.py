@@ -27,12 +27,18 @@ QUALI_BONUS = 0.05
 SPRINT_BONUS = 0.025
 DIFF_RACE = 0.15
 DIFF_SPRINT = 0.025
-# ---------- = 1
+
+RACE_WEIGHT = 0.65
+QUALI_WEIGHT = 0.25
+SPRINT_WEIGHT = 0.1
 
 ROOKIE_RATING_COUNT = 5
 ROOKIE_MODIFIER = 1.2
 
 SWING_MULTIPLIER = 2
+SWING_MULTIPLIER_TEAM = 100
+
+RESET_TEAM_RATINGS_SEASON = True
 
 def load_data():
     print("Loading data from Kaggle dataset...")
@@ -375,17 +381,54 @@ def compute_teammate_place_diff(drivers, statuses, driver_id, team_id, position,
 
     return sum(diffs_adjusted) / len(diffs_adjusted) if diffs_adjusted else 0
 
+def compute_team_rating_change(teams, team_id, teams_weighted_pos):
+    team_weighted_pos = next((pos for pos in teams_weighted_pos if pos[0] == team_id), None)
+    if not team_weighted_pos:
+        return 0
+    team_pos = team_weighted_pos[1]
+    best_pos = min(pos[1] for pos in teams_weighted_pos)
+    worst_pos = max(pos[1] for pos in teams_weighted_pos)
+    if best_pos == worst_pos:
+        return 0
+
+    middle_pos = (best_pos + worst_pos) / 2
+    raw_change = team_pos - middle_pos
+    raw_change = raw_change / (worst_pos - best_pos)
+
+    team = next((t for t in teams if t.id == team_id), None)
+    if not team or not team.ratings:
+        return 0
+    team_rating = team.ratings[-1]
+
+    teams_filtered = [team for team in teams if team.id in [pos[0] for pos in teams_weighted_pos]]
+    total_rating = sum(t.ratings[-1] for t in teams_filtered if t.ratings)
+    num_teams = len(teams_filtered)
+    if num_teams == 0:
+        return 0
+    average_opponent_rating = total_rating / num_teams
+    rating_change = 1 / (1 + 10 ** ((average_opponent_rating - team_rating) / 400))
+    final_change = raw_change * rating_change
+
+    return final_change
+
 def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
     for driver in drivers:
         driver.ratings.append(BASE_DRIVER_RATING)
-    for team in teams:
-        team.ratings.append(BASE_TEAM_RATING)
+    if not RESET_TEAM_RATINGS_SEASON:
+        for team in teams:
+            team.ratings.append(BASE_TEAM_RATING)
 
     for season in seasons:
         print(f"Computing ratings for season {season.year}...")
+        if RESET_TEAM_RATINGS_SEASON:
+            for team in teams:
+                team.ratings.append(BASE_TEAM_RATING) # reset team ratings at the start of each season
         for race in season.races:
             print(f"\tComputing ratings for race {race.name}...")
             numDrivers = len(race.results)
+            teams_positions_races = {}
+            teams_positions_qualis = {}
+            teams_positions_sprints = {}
             for driver_result in race.results:
                 diff_teammates = compute_teammate_place_diff(drivers, statuses,
                                                              driver_result[0], driver_result[1], driver_result[2], driver_result[3],
@@ -432,6 +475,41 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                     sign = -1
                 diff_sprint = distribution_function(abs(diff_sprint), numDrivers - 1, 5) * sign
 
+                driver_team_rating = next((t for t in teams if t.id == driver_result[1]), None)
+                driver_team_rating = driver_team_rating.ratings[-1] if driver_team_rating else BASE_TEAM_RATING
+                diff_team_performance = driver_team_rating - BASE_TEAM_RATING
+
+                sign = 1
+                if driver_team_rating < BASE_TEAM_RATING:
+                    sign = -1
+                diff_team_performance = distribution_function(abs(diff_team_performance), 1000, 1) * sign
+
+                if driver_result[1] not in teams_positions_races:
+                    teams_positions_races[driver_result[1]] = []
+                try:
+                    race_pos = int(driver_result[2])
+                except (ValueError, TypeError):
+                    race_pos = numDrivers
+                teams_positions_races[driver_result[1]].append(race_pos)
+
+                if driver_result[1] not in teams_positions_qualis:
+                    teams_positions_qualis[driver_result[1]] = []
+                if quali_result:
+                    try:
+                        quali_pos = int(quali_result[2])
+                    except (ValueError, TypeError):
+                        quali_pos = numDrivers
+                    teams_positions_qualis[driver_result[1]].append(quali_pos)
+
+                if driver_result[1] not in teams_positions_sprints:
+                    teams_positions_sprints[driver_result[1]] = []
+                if sprint_result:
+                    try:
+                        sprint_pos = int(sprint_result[2])
+                    except (ValueError, TypeError):
+                        sprint_pos = numDrivers
+                    teams_positions_sprints[driver_result[1]].append(sprint_pos)
+
                 driver = next((d for d in drivers if d.id == driver_result[0]), None)
                 if driver:
                     driver_rating = driver.ratings[-1]
@@ -442,16 +520,59 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                     rating_penalty = 0
                     if penalty:
                         rating_penalty = driver_rating*PENALTY_FACTOR
-                    new_driver_rating = driver_rating + (
-                                        + diff_teammates*DIFF_TEAMMATES * rookie_multiplier
-                                        + race_bonus*RACE_BONUS * rookie_multiplier
-                                        + quali_bonus*QUALI_BONUS * rookie_multiplier
-                                        + sprint_bonus*SPRINT_BONUS * rookie_multiplier
-                                        + diff_race*DIFF_RACE * rookie_multiplier
-                                        + diff_sprint*DIFF_SPRINT * rookie_multiplier
-                                        - rating_penalty
-                                    ) * SWING_MULTIPLIER
+                    rating_change = (
+                                    + diff_teammates*DIFF_TEAMMATES * rookie_multiplier
+                                    + race_bonus*RACE_BONUS * rookie_multiplier
+                                    + quali_bonus*QUALI_BONUS * rookie_multiplier
+                                    + sprint_bonus*SPRINT_BONUS * rookie_multiplier
+                                    + diff_race*DIFF_RACE * rookie_multiplier
+                                    + diff_sprint*DIFF_SPRINT * rookie_multiplier
+                                    - rating_penalty
+                                ) * SWING_MULTIPLIER
+                    if diff_team_performance < 0:
+                        rating_change *= 1 + diff_team_performance
+                    elif diff_team_performance > 0:
+                        rating_change *= 1 + diff_team_performance
+                    new_driver_rating = driver_rating + rating_change
+
                     driver.ratings.append(new_driver_rating)
+
+            teams_weighted_pos = [] # (team_id, weighted_position)
+            for team_id, team_positions_race in teams_positions_races.items():
+                team = next((t for t in teams if t.id == team_id), None)
+                if team:
+                    race_avg = 0
+                    for position in team_positions_race:
+                        race_avg += position
+                    if len(team_positions_race) != 0:
+                        race_avg = len(team_positions_race)
+                    quali_avg = 0
+                    if team_id in teams_positions_qualis:
+                        for position in teams_positions_qualis[team_id]:
+                            quali_avg += position
+                        if len(teams_positions_qualis[team_id]) != 0:
+                            quali_avg = len(teams_positions_qualis[team_id])
+                    sprint_avg = 0
+                    if team_id in teams_positions_sprints:
+                        for position in teams_positions_sprints[team_id]:
+                            sprint_avg += position
+                        if len(teams_positions_sprints[team_id]) != 0:
+                            sprint_avg = len(teams_positions_sprints[team_id])
+                    team_weighted_pos = (
+                                      + race_avg*RACE_WEIGHT
+                                      + quali_avg*QUALI_WEIGHT
+                                      + sprint_avg*SPRINT_WEIGHT
+                                  )
+                    teams_weighted_pos.append((team.id, team_weighted_pos))
+
+            teams_copy = teams.copy()
+            for team_id, _ in teams_weighted_pos:
+                team = next((t for t in teams if t.id == team_id), None)
+                rating_change = compute_team_rating_change(teams_copy, team_id, teams_weighted_pos)
+                if team:
+                    team_rating = team.ratings[-1]
+                    new_team_rating = team_rating + rating_change * SWING_MULTIPLIER_TEAM
+                    team.ratings.append(new_team_rating)
 
     return drivers, teams
 
@@ -468,13 +589,8 @@ if __name__ == "__main__":
     drivers, teams = compute_ratings(seasons, drivers, teams, qualis, sprints, statuses)
 
     print("Ratings computed successfully!")
-    print("Drivers current:")
-    drivers.sort(key=lambda x: x.ratings[-1])
-    pos = len(drivers)
-    for driver in drivers:
-        print(f"{pos:>4}. {driver.forename:<12} {driver.surname:<12} | {driver.ratings[-1]:>5}")
-        pos -= 1
 
+    drivers.sort(key=lambda x: x.ratings[-1])
     pos = len(drivers)
     with open("ratings/driver_ratings_current.txt", "w") as f:
         for driver in drivers:
@@ -482,14 +598,7 @@ if __name__ == "__main__":
             f.write(line)
             pos -= 1
 
-    print("Drivers' peak ratings:")
     drivers.sort(key=lambda x: max(x.ratings))
-    pos = len(drivers)
-    for driver in drivers:
-        peak_rating = max(driver.ratings)
-        print(f"{pos:>4}. {driver.forename:<12} {driver.surname:<12} | {peak_rating:>5}")
-        pos -= 1
-
     pos = len(drivers)
     with open("ratings/driver_ratings_peak.txt", "w") as f:
         for driver in drivers:
@@ -497,3 +606,48 @@ if __name__ == "__main__":
             line = f"{pos:>4}. {driver.forename:<12} {driver.surname:<12} | {peak_rating:>5}\n"
             f.write(line)
             pos -= 1
+
+    pos = len(teams)
+    teams.sort(key=lambda x: x.ratings[-1])
+    with open("ratings/team_ratings_current.txt", "w") as f:
+        for team in teams:
+            line = f"{pos:>4}. {team.name:<12} | {team.ratings[-1]:>5}\n"
+            f.write(line)
+            pos -= 1
+
+    pos = len(teams)
+    teams.sort(key=lambda x: max(x.ratings))
+    with open("ratings/team_ratings_peak.txt", "w") as f:
+        for team in teams:
+            peak_rating = max(team.ratings)
+            line = f"{pos:>4}. {team.name:<12} | {peak_rating:>5}\n"
+            f.write(line)
+            pos -= 1
+
+    print("Today's grid:")
+    races.sort(key=lambda x: x.date, reverse=True)
+    last_race = races[0]
+    last_race_drivers = set()
+    for result in last_race.results:
+        if result[0] not in last_race_drivers:
+            last_race_drivers.add(result[0])
+
+    num_current_drivers = len(last_race_drivers)
+    drivers.sort(key=lambda x: x.ratings[-1])
+    for driver in drivers:
+        if driver.id in last_race_drivers:
+            print(f"{num_current_drivers:>2}. {driver.forename:<12} {driver.surname:<12} | {driver.ratings[-1]:>5}")
+            num_current_drivers -= 1
+
+    print("Today's teams:")
+    last_race_teams = set()
+    for result in last_race.results:
+        if result[1] not in last_race_teams:
+            last_race_teams.add(result[1])
+
+    num_current_teams = len(last_race_teams)
+    teams.sort(key=lambda x: x.ratings[-1])
+    for team in teams:
+        if team.id in last_race_teams:
+            print(f"{num_current_teams:>2}. {team.name:<12} | {team.ratings[-1]:>5}")
+            num_current_teams -= 1
