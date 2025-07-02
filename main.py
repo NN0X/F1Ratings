@@ -2,6 +2,7 @@ import kagglehub
 from kagglehub import KaggleDatasetAdapter
 from datetime import datetime
 from dataclasses import dataclass
+import matplotlib.pyplot as plt
 
 KAGGLE_PATH = "jtrotman/formula-1-race-data"
 FILES = ["constructor_results.csv",
@@ -17,8 +18,21 @@ FILES = ["constructor_results.csv",
 
 BASE_DRIVER_RATING = 1000
 BASE_TEAM_RATING = 1000
-PENALTY_FACTOR = 0.05
-DIFF_TEAMMATES = 0.3
+
+PENALTY_FACTOR = 0.01
+
+DIFF_TEAMMATES = 0.65
+RACE_BONUS = 0.1
+QUALI_BONUS = 0.05
+SPRINT_BONUS = 0.025
+DIFF_RACE = 0.15
+DIFF_SPRINT = 0.025
+# ---------- = 1
+
+ROOKIE_RATING_COUNT = 5
+ROOKIE_MODIFIER = 1.2
+
+SWING_MULTIPLIER = 2
 
 def load_data():
     print("Loading data from Kaggle dataset...")
@@ -300,6 +314,21 @@ def compile_seasons(races):
 
     return seasons
 
+def distribution_function(x, a, N=1):
+    try:
+        x = float(x)
+        a = float(a)
+    except ValueError:
+        return 0
+    if x <= 0:
+        return 0
+    elif x <= a / 2:
+        return N * ((1 - (x - 1) / (a / 2 - 1)) ** 3)
+    elif x <= a:
+        return -N * (((x - a / 2) / (a - a / 2)) ** 3)
+    else:
+        return 0
+
 def compute_teammate_place_diff(drivers, statuses, driver_id, team_id, position, status, results, lastPossiblePosition):
     try:
         position = int(position)
@@ -333,7 +362,16 @@ def compute_teammate_place_diff(drivers, statuses, driver_id, team_id, position,
     if not expectedScores:
         return 0
 
-    diffs_adjusted = [diff * expected_score for diff, expected_score in zip(diffs, expectedScores)]
+    diffs_distributed = []
+    for diff in diffs:
+        if diff < 0:
+            sign = -1
+        else:
+            sign = 1
+        distributed_diff = distribution_function(abs(diff), lastPossiblePosition - 1, 5) * sign
+        diffs_distributed.append(distributed_diff)
+
+    diffs_adjusted = [diff * 2 * expected_score for diff, expected_score in zip(diffs_distributed, expectedScores)]
 
     return sum(diffs_adjusted) / len(diffs_adjusted) if diffs_adjusted else 0
 
@@ -356,13 +394,63 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                 if driver_result[3] is not None and is_driver_fault(driver_result[3], statuses):
                     penalty = True
 
+                race_starting_pos = next((pos for pos in race.starting_positions if pos[0] == driver_result[0]), None)
+
+                race_quali = next((quali for quali in qualis if quali.race_id == race.id ), None)
+                if race_quali is None:
+                    quali_result = None
+                else:
+                    quali_result = next((result for result in race_quali.results if result[0] == driver_result[0]), None)
+
+                race_sprint = next((sprint for sprint in sprints if sprint.race_id == race.id), None)
+                if race_sprint is None:
+                    sprint_result = None
+                    sprint_starting_pos = None
+                else:
+                    sprint_result = next((result for result in race_sprint.results if result[0] == driver_result[0]), None)
+                    sprint_starting_pos = next((pos for pos in race_sprint.starting_positions if pos[0] == driver_result[0]), None)
+
+                race_bonus = distribution_function(driver_result[2], numDrivers, 5) if driver_result else 0
+                quali_bonus = distribution_function(quali_result[2], numDrivers, 5) if quali_result else 0
+                sprint_bonus = distribution_function(sprint_result[2], numDrivers, 5) if sprint_result else 0
+
+                try:
+                    diff_race = race_starting_pos[1] - int(driver_result[2]) if race_starting_pos else 0
+                except (ValueError, TypeError):
+                    diff_race = 0
+                try:
+                    diff_sprint = sprint_starting_pos[1] - int(sprint_result[2]) if sprint_starting_pos else 0
+                except (ValueError, TypeError):
+                    diff_sprint = 0
+
+                sign = 1
+                if diff_race < 0:
+                    sign = -1
+                diff_race = distribution_function(abs(diff_race), numDrivers - 1, 5) * sign
+                sign = 1
+                if diff_sprint < 0:
+                    sign = -1
+                diff_sprint = distribution_function(abs(diff_sprint), numDrivers - 1, 5) * sign
+
                 driver = next((d for d in drivers if d.id == driver_result[0]), None)
                 if driver:
                     driver_rating = driver.ratings[-1]
+                    if len(driver.ratings) < ROOKIE_RATING_COUNT:
+                        rookie_multiplier = 1 + ROOKIE_MODIFIER * (1 / (ROOKIE_RATING_COUNT - len(driver.ratings)))
+                    else:
+                        rookie_multiplier = 1
                     rating_penalty = 0
                     if penalty:
-                        rating_penalty = driver_rating * PENALTY_FACTOR
-                    new_driver_rating = driver_rating + diff_teammates*DIFF_TEAMMATES - rating_penalty
+                        rating_penalty = driver_rating*PENALTY_FACTOR
+                    new_driver_rating = driver_rating + (
+                                        + diff_teammates*DIFF_TEAMMATES * rookie_multiplier
+                                        + race_bonus*RACE_BONUS * rookie_multiplier
+                                        + quali_bonus*QUALI_BONUS * rookie_multiplier
+                                        + sprint_bonus*SPRINT_BONUS * rookie_multiplier
+                                        + diff_race*DIFF_RACE * rookie_multiplier
+                                        + diff_sprint*DIFF_SPRINT * rookie_multiplier
+                                        - rating_penalty
+                                    ) * SWING_MULTIPLIER
                     driver.ratings.append(new_driver_rating)
 
     return drivers, teams
@@ -388,7 +476,7 @@ if __name__ == "__main__":
         pos -= 1
 
     pos = len(drivers)
-    with open("driver_ratings_current.txt", "w") as f:
+    with open("ratings/driver_ratings_current.txt", "w") as f:
         for driver in drivers:
             line = f"{pos:>4}. {driver.forename:<12} {driver.surname:<12} | {driver.ratings[-1]:>5}\n"
             f.write(line)
@@ -403,7 +491,7 @@ if __name__ == "__main__":
         pos -= 1
 
     pos = len(drivers)
-    with open("driver_ratings_peak.txt", "w") as f:
+    with open("ratings/driver_ratings_peak.txt", "w") as f:
         for driver in drivers:
             peak_rating = max(driver.ratings)
             line = f"{pos:>4}. {driver.forename:<12} {driver.surname:<12} | {peak_rating:>5}\n"
