@@ -1,0 +1,212 @@
+ 212. BMW Sauber   |  1000
+ 211. Super Aguri  |  1000
+ 210. Honda        |  1000
+ 209. Spyker       |  1000
+ 208. MF1          |  1000
+ 207. Spyker MF1   |  1000
+ 206. Brawn        |  1000
+ 205. Forti        |  1000
+ 204. Pacific      |  1000
+ 203. Andrea Moda  |  1000
+ 202. Life         |  1000
+ 201. Spirit       |  1000
+ 200. Ensign       |  1000
+ 199. Wolf         |  1000
+ 198. Merzario     |  1000
+ 197. Kauhsen      |  1000
+ 196. Rebaque      |  1000
+ 195. Martini      |  1000
+ 194. Penske       |  1000
+ 193. LEC          |  1000
+ 192. McGuire      |  1000
+ 191. Boro         |  1000
+ 190. Apollon      |  1000
+ 189. Kojima       |  1000
+ 188. Parnelli     |  1000
+ 187. Maki         |  1000
+ 186. Embassy Hill |  1000
+ 185. Lyncar       |  1000
+ 184. Trojan       |  1000
+ 183. Amon         |  1000
+ 182. Token        |  1000
+ 181. Iso Marlboro |  1000
+ 180. Tecno        |  1000
+ 179. Matra        |  1000
+ 178. Politoys     |  1000
+ 177. Connew       |  1000
+ 176. Bellasi      |  1000
+ 175. De Tomaso    |  1000
+ 174. Cooper       |  1000
+ 173. Eagle        |  1000
+ 172. LDS          |  1000
+ 171. Protos       |  1000
+ 170. Shannon      |  1000
+ 169. Scirocco     |  1000
+ 168. RE           |  1000
+ 167. BRP          |  1000
+ 166. Derrington   |  1000
+ 165. Gilby        |  1000
+ 164. Stebro       |  1000
+ 163. Emeryson     |  1000
+ 162. ENB          |  1000
+ 161. JBW          |  1000
+ 160. Ferguson     |  1000
+ 159. MBM          |  1000
+ 158. Behra-Porsche |  1000
+ 157. Scarab       |  1000
+ 156. Phillips     |  1000
+ 155. Lesovsky     |  1000
+ 154. Trevis       |  1000
+ 153. Meskowski    |  1000
+ 152. Kuzma        |  1000
+ 151. Christensen  |  1000
+ 150. Ewing        |  1000
+ 149. Vanwall      |  1000
+ 148. Moore        |  1000
+ 147. Dunn         |  1000
+ 146. Elder        |  1000
+ 145. Sutton       |  1000
+ 144. Fry          |  1000
+ 143. Tec-Mec      |  1000
+ 142. Alta         |  1000
+ 141. OSCA         |  1000
+ 140. Stevens      |  1000
+ 139. Bugatti      |  1000
+ 138. Lancia       |  1000
+ 137. Schroeder    |  1000
+ 136. Pawl         |  1000
+ 135. Pankratz     |  1000
+ 134. Arzani-Volpini |  1000
+ 133. Nichels      |  1000
+ 132. Bromme       |  1000
+ 131. Klenk        |  1000
+ 130. Simca        |  1000
+ 129. Turner       |  1000
+ 128. Del Roy      |  1000
+ 127. Veritas      |  1000
+ 126. BMW          |  1000
+ 125. EMW          |  1000
+ 124. AFM          |  1000
+ 123. Frazer Nash  |  1000
+ 122. Sherman      |  1000
+ 121. Deidt        |  1000
+ 120. Aston Butterworth |  1000
+ 119. Cisitalia    |  1000
+ 118. Hall         |  1000
+ 117. Marchese     |  1000
+ 116. Langley      |  1000
+ 115. Rae          |  1000
+ 114. Olson        |  1000
+ 113. Wetteroth    |  1000
+ 112. Adams        |  1000
+ 111. Snowberger   |  1000
+ 110. Milano       |  1000
+ 109. Cooper-OSCA  |  1000
+ 108. Cooper-Borgward |  1000
+ 107. Cooper-Castellotti |  1000
+ 106. Lotus-Maserati |  1000
+ 105. De Tomaso-Osca |  1000
+ 104. De Tomaso-Alfa Romeo |  1000
+ 103. Lotus-Borgward |  1000
+ 102. Cooper-Alfa Romeo |  1000
+ 101. De Tomaso-Ferrari |  1000
+ 100. Brabham-BRM  |  1000
+  99. LDS-Climax   |  1000
+  98. LDS-Alfa Romeo |  1000
+  97. Cooper-Ford  |  1000
+  96. McLaren-Serenissima |  1000
+  95. Eagle-Climax |  1000
+  94. Eagle-Weslake |  1000
+  93. Cooper-Ferrari |  1000
+  92. Cooper-ATS   |  1000
+  91. McLaren-BRM  |  1000
+  90. Cooper-BRM   |  1000
+  89. Matra-Ford   |  1000
+  88. BRM-Ford     |  1000
+  87. McLaren-Alfa Romeo |  1000
+  86. March-Alfa Romeo |  1000
+  85. Lotus-Pratt &amp; Whitney |  1000
+  84. Shadow-Matra |  1000
+  83. ERA          | 1004.9999585790354
+  82. Epperly      | 1010.637191561808
+  81. Connaught    | 1011.9729349126885
+  80. Hesketh      | 1018.2401563575551
+  79. Porsche      | 1019.2019041846063
+  78. Alpine F1 Team | 1024.113773315599
+  77. Racing Point | 1024.2883629367918
+  76. AlphaTauri   | 1024.2883629367918
+  75. RB F1 Team   | 1024.2883629367918
+  74. Aston Martin | 1024.464287350935
+  73. Watson       | 1025.0
+  72. Kurtis Kraft | 1025.4177391151777
+  71. HWM          | 1025.624243498707
+  70. McLaren-Ford | 1033.763292901669
+  69. Gordini      | 1038.2814187060417
+  68. Marussia     | 1041.8284986218318
+  67. Fondmetal    | 1047.6340445826809
+  66. Toyota       | 1048.0108442660535
+  65. Jaguar       | 1048.3521784905686
+  64. BAR          | 1048.7203391270807
+  63. Brabham-Alfa Romeo | 1055.0883627322703
+  62. Manor Marussia | 1072.1568338821814
+  61. Prost        | 1072.770682288277
+  60. Stewart      | 1072.7958241966644
+  59. Simtek       | 1095.066731466314
+  58. HRT          | 1096.4671004695049
+  57. Caterham     | 1097.091840352831
+  56. Virgin       | 1097.1137881918924
+  55. Lotus        | 1097.7650441505145
+  54. Lotus F1     | 1100.2794640166896
+  53. Brabham-Ford | 1117.3834680220234
+  52. Haas F1 Team | 1123.4280426831301
+  51. Toro Rosso   | 1123.893698142989
+  50. Force India  | 1125.8591247037418
+  49. Red Bull     | 1127.3697088462964
+  48. Mercedes     | 1128.9490936153122
+  47. Shadow-Ford  | 1129.8494933828133
+  46. Surtees      | 1138.3838057761632
+  45. Lotus-BRM    | 1192.695963402085
+  44. Talbot-Lago  | 1212.3899385127766
+  43. Brabham-Repco | 1216.9871869679637
+  42. Maserati     | 1225.2636120378068
+  41. Shadow       | 1260.279546412444
+  40. Brabham-Climax | 1263.462255093026
+  39. Lola         | 1272.9423019765586
+  38. ATS          | 1274.4697466106381
+  37. Sauber       | 1289.6604549227447
+  36. Cooper-Climax | 1293.9211612810775
+  35. Lotus-Climax | 1302.9174673557704
+  34. Lotus-Ford   | 1319.8274537376622
+  33. March-Ford   | 1334.1852895860934
+  32. Theodore     | 1341.4483894126952
+  31. RAM          | 1342.0100810964611
+  30. Fittipaldi   | 1356.1590860093531
+  29. Cooper-Maserati | 1357.927032007077
+  28. Toleman      | 1372.3141666202182
+  27. Coloni       | 1398.0094140728884
+  26. Osella       | 1401.4704079527571
+  25. Rial         | 1404.5484693255505
+  24. Onyx         | 1407.0558149148314
+  23. BRM          | 1407.936160154161
+  22. Lambo        | 1414.6917612585485
+  21. Footwork     | 1414.7597277667
+  20. AGS          | 1426.2369606623765
+  19. Jordan       | 1433.2543132177573
+  18. Dallara      | 1434.2167092319903
+  17. Leyton House | 1436.116136036029
+  16. Alfa Romeo   | 1436.1418204015406
+  15. Renault      | 1451.89173663458
+  14. Zakspeed     | 1478.2244752948504
+  13. Euro Brun    | 1487.0803091261462
+  12. Ligier       | 1488.4411745710993
+  11. Minardi      | 1490.0646291580058
+  10. Tyrrell      | 1490.08623708072
+   9. Larrousse    | 1492.6536540343134
+   8. Williams     | 1493.4563761414804
+   7. Arrows       | 1495.6651281080826
+   6. Team Lotus   | 1495.7105526757148
+   5. Ferrari      | 1500.0014316140337
+   4. Benetton     | 1501.6958969830353
+   3. Brabham      | 1528.0678323764828
+   2. McLaren      | 1542.669748028628
+   1. March        | 1612.18901027178

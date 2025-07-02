@@ -1,0 +1,212 @@
+ 212. Aston Martin | 976.0594757819607
+ 211. BMW Sauber   |  1000
+ 210. Renault      |  1000
+ 209. Toro Rosso   |  1000
+ 208. Toyota       |  1000
+ 207. Super Aguri  |  1000
+ 206. Force India  |  1000
+ 205. Honda        |  1000
+ 204. Spyker       |  1000
+ 203. MF1          |  1000
+ 202. Spyker MF1   |  1000
+ 201. BAR          |  1000
+ 200. Jordan       |  1000
+ 199. Minardi      |  1000
+ 198. Jaguar       |  1000
+ 197. Prost        |  1000
+ 196. Arrows       |  1000
+ 195. Benetton     |  1000
+ 194. Brawn        |  1000
+ 193. Stewart      |  1000
+ 192. Tyrrell      |  1000
+ 191. Lola         |  1000
+ 190. Ligier       |  1000
+ 189. Forti        |  1000
+ 188. Footwork     |  1000
+ 187. Pacific      |  1000
+ 186. Simtek       |  1000
+ 185. Team Lotus   |  1000
+ 184. Larrousse    |  1000
+ 183. Brabham      |  1000
+ 182. Dallara      |  1000
+ 181. Fondmetal    |  1000
+ 180. March        |  1000
+ 179. Andrea Moda  |  1000
+ 178. AGS          |  1000
+ 177. Lambo        |  1000
+ 176. Leyton House |  1000
+ 175. Coloni       |  1000
+ 174. Euro Brun    |  1000
+ 173. Osella       |  1000
+ 172. Onyx         |  1000
+ 171. Life         |  1000
+ 170. Rial         |  1000
+ 169. Zakspeed     |  1000
+ 168. RAM          |  1000
+ 167. Alfa Romeo   |  1000
+ 166. Spirit       |  1000
+ 165. Toleman      |  1000
+ 164. ATS          |  1000
+ 163. Theodore     |  1000
+ 162. Fittipaldi   |  1000
+ 161. Ensign       |  1000
+ 160. Shadow       |  1000
+ 159. Wolf         |  1000
+ 158. Merzario     |  1000
+ 157. Kauhsen      |  1000
+ 156. Rebaque      |  1000
+ 155. Surtees      |  1000
+ 154. Hesketh      |  1000
+ 153. Martini      |  1000
+ 152. BRM          |  1000
+ 151. Penske       |  1000
+ 150. LEC          |  1000
+ 149. McGuire      |  1000
+ 148. Boro         |  1000
+ 147. Apollon      |  1000
+ 146. Kojima       |  1000
+ 145. Parnelli     |  1000
+ 144. Maki         |  1000
+ 143. Embassy Hill |  1000
+ 142. Lyncar       |  1000
+ 141. Trojan       |  1000
+ 140. Amon         |  1000
+ 139. Token        |  1000
+ 138. Iso Marlboro |  1000
+ 137. Tecno        |  1000
+ 136. Matra        |  1000
+ 135. Politoys     |  1000
+ 134. Connew       |  1000
+ 133. Bellasi      |  1000
+ 132. De Tomaso    |  1000
+ 131. Cooper       |  1000
+ 130. Eagle        |  1000
+ 129. LDS          |  1000
+ 128. Protos       |  1000
+ 127. Shannon      |  1000
+ 126. Scirocco     |  1000
+ 125. RE           |  1000
+ 124. BRP          |  1000
+ 123. Porsche      |  1000
+ 122. Derrington   |  1000
+ 121. Gilby        |  1000
+ 120. Stebro       |  1000
+ 119. Emeryson     |  1000
+ 118. ENB          |  1000
+ 117. JBW          |  1000
+ 116. Ferguson     |  1000
+ 115. MBM          |  1000
+ 114. Behra-Porsche |  1000
+ 113. Maserati     |  1000
+ 112. Scarab       |  1000
+ 111. Watson       |  1000
+ 110. Epperly      |  1000
+ 109. Phillips     |  1000
+ 108. Lesovsky     |  1000
+ 107. Trevis       |  1000
+ 106. Meskowski    |  1000
+ 105. Kurtis Kraft |  1000
+ 104. Kuzma        |  1000
+ 103. Christensen  |  1000
+ 102. Ewing        |  1000
+ 101. Vanwall      |  1000
+ 100. Moore        |  1000
+  99. Dunn         |  1000
+  98. Elder        |  1000
+  97. Sutton       |  1000
+  96. Fry          |  1000
+  95. Tec-Mec      |  1000
+  94. Connaught    |  1000
+  93. Alta         |  1000
+  92. OSCA         |  1000
+  91. Gordini      |  1000
+  90. Stevens      |  1000
+  89. Bugatti      |  1000
+  88. Lancia       |  1000
+  87. HWM          |  1000
+  86. Schroeder    |  1000
+  85. Pawl         |  1000
+  84. Pankratz     |  1000
+  83. Arzani-Volpini |  1000
+  82. Nichels      |  1000
+  81. Bromme       |  1000
+  80. Klenk        |  1000
+  79. Simca        |  1000
+  78. Turner       |  1000
+  77. Del Roy      |  1000
+  76. Veritas      |  1000
+  75. BMW          |  1000
+  74. EMW          |  1000
+  73. AFM          |  1000
+  72. Frazer Nash  |  1000
+  71. Sherman      |  1000
+  70. Deidt        |  1000
+  69. ERA          |  1000
+  68. Aston Butterworth |  1000
+  67. Cisitalia    |  1000
+  66. Talbot-Lago  |  1000
+  65. Hall         |  1000
+  64. Marchese     |  1000
+  63. Langley      |  1000
+  62. Rae          |  1000
+  61. Olson        |  1000
+  60. Wetteroth    |  1000
+  59. Adams        |  1000
+  58. Snowberger   |  1000
+  57. Milano       |  1000
+  56. HRT          |  1000
+  55. Cooper-Maserati |  1000
+  54. Virgin       |  1000
+  53. Cooper-OSCA  |  1000
+  52. Cooper-Borgward |  1000
+  51. Cooper-Climax |  1000
+  50. Cooper-Castellotti |  1000
+  49. Lotus-Climax |  1000
+  48. Lotus-Maserati |  1000
+  47. De Tomaso-Osca |  1000
+  46. De Tomaso-Alfa Romeo |  1000
+  45. Lotus-BRM    |  1000
+  44. Lotus-Borgward |  1000
+  43. Cooper-Alfa Romeo |  1000
+  42. De Tomaso-Ferrari |  1000
+  41. Lotus-Ford   |  1000
+  40. Brabham-BRM  |  1000
+  39. Brabham-Ford |  1000
+  38. Brabham-Climax |  1000
+  37. LDS-Climax   |  1000
+  36. LDS-Alfa Romeo |  1000
+  35. Cooper-Ford  |  1000
+  34. McLaren-Ford |  1000
+  33. McLaren-Serenissima |  1000
+  32. Eagle-Climax |  1000
+  31. Eagle-Weslake |  1000
+  30. Brabham-Repco |  1000
+  29. Cooper-Ferrari |  1000
+  28. Cooper-ATS   |  1000
+  27. McLaren-BRM  |  1000
+  26. Cooper-BRM   |  1000
+  25. Matra-Ford   |  1000
+  24. BRM-Ford     |  1000
+  23. McLaren-Alfa Romeo |  1000
+  22. March-Alfa Romeo |  1000
+  21. March-Ford   |  1000
+  20. Lotus-Pratt &amp; Whitney |  1000
+  19. Shadow-Ford  |  1000
+  18. Shadow-Matra |  1000
+  17. Brabham-Alfa Romeo |  1000
+  16. Lotus        |  1000
+  15. Marussia     |  1000
+  14. Caterham     |  1000
+  13. Lotus F1     |  1000
+  12. Manor Marussia |  1000
+  11. Racing Point |  1000
+  10. AlphaTauri   |  1000
+   9. Haas F1 Team | 1023.7673948102515
+   8. Williams     | 1023.9392887749137
+   7. Red Bull     | 1024.1125282568914
+   6. Alpine F1 Team | 1024.113773315599
+   5. RB F1 Team   | 1024.2883629367918
+   4. Sauber       | 1024.464287350935
+   3. Mercedes     | 1024.641540033852
+   2. Ferrari      | 1024.8201136442187
+   1. McLaren      | 1025.0
