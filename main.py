@@ -32,17 +32,18 @@ TEAM_RACE_WEIGHT = 0.5
 TEAM_QUALI_WEIGHT = 0.35
 TEAM_SPRINT_WEIGHT = 0.15
 
-ROOKIE_RATING_COUNT = 5
-ROOKIE_MODIFIER = 1.5
+ROOKIE_RATING_COUNT = 7
+ROOKIE_MODIFIER = 2
 
-SWING_MULTIPLIER = 2
-SWING_MULTIPLIER_TEAM = 1000
+SWING_MULTIPLIER = 6
+SWING_MULTIPLIER_TEAM = 700
 
 RESET_TEAM_RATINGS_SEASON = False
 RERATE_TEAM_RATINGS_SEASON = False
 RESET_TEAM_REENTRY_RATINGS = True
 
 TEAM_RATING_DECAY_NUM_RACES = 20
+DRIVER_RATING_DECAY_NUM_RACES = 80
 
 def load_data():
     print("Loading data from Kaggle dataset...")
@@ -445,7 +446,7 @@ def rerate_teams(season, teams):
 
     return teams
 
-def compute_team_rating_decay(teams, decay_full_num_races, num_races_weight):
+def compute_teams_rating_decay(teams, decay_full_num_races, num_races_weight):
     decays = {}
     for team in teams:
         diff = team.ratings[-1][0] - BASE_TEAM_RATING
@@ -453,6 +454,16 @@ def compute_team_rating_decay(teams, decay_full_num_races, num_races_weight):
             continue
         decay = diff / (decay_full_num_races/num_races_weight)
         decays[team.id] = decay
+    return decays
+
+def compute_drivers_rating_decay(drivers, decay_full_num_races, num_races_weight):
+    decays = {}
+    for driver in drivers:
+        diff = driver.ratings[-1][0] - BASE_DRIVER_RATING
+        if diff == 0:
+            continue
+        decay = diff / (decay_full_num_races/num_races_weight)
+        decays[driver.id] = decay
     return decays
 
 def reset_team_reentry_ratings(seasons, season, teams):
@@ -505,6 +516,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
             teams_positions_races = {}
             teams_positions_qualis = {}
             teams_positions_sprints = {}
+            drivers_decays = compute_drivers_rating_decay(drivers, DRIVER_RATING_DECAY_NUM_RACES, num_races_weight)
             for driver_result in race.results:
                 diff_teammates = compute_teammate_place_diff(drivers, statuses,
                                                              driver_result[0], driver_result[1], driver_result[2], driver_result[3],
@@ -635,6 +647,11 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                     else:
                         rookie_multiplier_diff_sprint = rookie_multiplier
 
+                    if driver_result[0] in drivers_decays:
+                        decay = drivers_decays[driver_result[0]]
+                    else:
+                        decay = 0
+
                     rating_change = (
                                     + diff_teammates*DIFF_TEAMMATES * rookie_multiplier_diff_teammates
                                     + race_bonus*RACE_BONUS * rookie_multiplier_race
@@ -646,13 +663,13 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                                 ) * SWING_MULTIPLIER
                     if diff_team_performance != 0:
                         rating_change *= 1 + diff_team_performance
-                    new_driver_rating = driver_rating + rating_change
+                    new_driver_rating = driver_rating + rating_change - decay
 
                     driver.ratings.append((new_driver_rating, race.date))
 
             teams_weighted_pos = [] # (team_id, weighted_position)
 
-            team_decays = compute_team_rating_decay(teams, TEAM_RATING_DECAY_NUM_RACES, num_races_weight)
+            team_decays = compute_teams_rating_decay(teams, TEAM_RATING_DECAY_NUM_RACES, num_races_weight)
             for team_id, team_positions_race in teams_positions_races.items():
                 team = next((t for t in teams if t.id == team_id), None)
                 if team:
@@ -868,3 +885,8 @@ if __name__ == "__main__":
     print("Ratings saved to files.")
 
     print_today_grid(teams, drivers, races)
+
+    plot_drivers_rating([
+        get_driver_by_name(drivers, "Robert Kubica"),
+        get_driver_by_name(drivers, "Max Verstappen"),
+    ])
