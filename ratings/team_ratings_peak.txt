@@ -1,212 +1,212 @@
- 212. Hesketh              |  1500 None
- 211. Martini              |  1500 None
- 210. Boro                 |  1500 None
- 209. Bromme               |  1500 None
- 208. Brabham-BRM          |  1500 None
- 207. Alta                 |  1500 None
- 206. Frazer Nash          |  1500 None
- 205. Aston Butterworth    |  1500 None
- 204. Parnelli             |  1500 None
- 203. De Tomaso            |  1500 None
- 202. Deidt                |  1500 None
- 201. Phillips             |  1500 None
- 200. Stevens              |  1500 None
- 199. Schroeder            |  1500 None
- 198. Penske               |  1500 None
- 197. McLaren-Alfa Romeo   |  1500 None
- 196. Simca                |  1500 None
- 195. Sherman              |  1500 None
- 194. Bellasi              |  1500 None
- 193. Marchese             |  1500 None
- 192. March-Alfa Romeo     |  1500 None
- 191. Merzario             |  1500 None
- 190. Matra                |  1500 None
- 189. Wolf                 |  1500 None
- 188. Lotus-Pratt &amp; Whitney |  1500 None
- 187. Lesovsky             |  1500 None
- 186. Pankratz             |  1500 None
- 185. Cooper-Ferrari       |  1500 None
- 184. Pawl                 |  1500 None
- 183. Kuzma                |  1500 None
- 182. Maki                 |  1500 None
- 181. LEC                  |  1500 None
- 180. Emeryson             |  1500 None
- 179. Tecno                |  1500 None
- 178. Gilby                |  1500 None
- 177. Dunn                 |  1500 None
- 176. Christensen          |  1500 None
- 175. Eagle-Weslake        |  1500 None
- 174. Del Roy              |  1500 None
- 173. JBW                  |  1500 None
- 172. McLaren-Serenissima  |  1500 None
- 171. McLaren-BRM          |  1500 None
- 170. Snowberger           |  1500 None
- 169. De Tomaso-Osca       |  1500 None
- 168. Hall                 |  1500 None
- 167. Wetteroth            |  1500 None
- 166. Turner               |  1500 None
- 165. Vanwall              |  1500 None
- 164. Olson                |  1500 None
- 163. AFM                  |  1500 None
- 162. Rae                  |  1500 None
- 161. Adams                |  1500 None
- 160. Cooper-Ford          |  1500 None
- 159. Shannon              |  1500 None
- 158. Shadow-Matra         |  1500 None
- 157. Kauhsen              |  1500 None
- 156. Cisitalia            |  1500 None
- 155. Langley              |  1500 None
- 154. BRP                  |  1500 None
- 153. Veritas              |  1500 None
- 152. Nichels              |  1500 None
- 151. Porsche              |  1500 None
- 150. Lotus-Borgward       |  1500 None
- 149. Connaught            |  1500 None
- 148. Scirocco             |  1500 None
- 147. Sutton               |  1500 None
- 146. Trojan               |  1500 None
- 145. Rebaque              |  1500 None
- 144. Fry                  |  1500 None
- 143. Cooper-Castellotti   |  1500 None
- 142. Elder                |  1500 None
- 141. Apollon              |  1500 None
- 140. Milano               |  1500 None
- 139. Embassy Hill         |  1500 None
- 138. Moore                |  1500 None
- 137. LDS-Climax           |  1500 None
- 136. De Tomaso-Alfa Romeo |  1500 None
- 135. Cooper-Borgward      |  1500 None
- 134. Token                |  1500 None
- 133. RE                   |  1500 None
- 132. McGuire              |  1500 None
- 131. Scarab               |  1500 None
- 130. Politoys             |  1500 None
- 129. Ewing                |  1500 None
- 128. Meskowski            |  1500 None
- 127. Connew               |  1500 None
- 126. McLaren-Ford         |  1500 None
- 125. Trevis               |  1500 None
- 124. Behra-Porsche        |  1500 None
- 123. Epperly              |  1500 None
- 122. Cooper-Alfa Romeo    |  1500 None
- 121. Iso Marlboro         |  1500 None
- 120. ENB                  |  1500 None
- 119. Lyncar               |  1500 None
- 118. Watson               |  1500 None
- 117. Lotus-Maserati       |  1500 None
- 116. De Tomaso-Ferrari    |  1500 None
- 115. Amon                 |  1500 None
- 114. LDS                  |  1500 None
- 113. Derrington           |  1500 None
- 112. Cooper-ATS           |  1500 None
- 111. Ferguson             |  1500 None
- 110. EMW                  |  1500 None
- 109. OSCA                 |  1500 None
- 108. Gordini              |  1500 None
- 107. MBM                  |  1500 None
- 106. Tec-Mec              |  1500 None
- 105. Kojima               |  1500 None
- 104. Cooper-OSCA          |  1500 None
- 103. Matra-Ford           |  1500 None
- 102. BMW                  |  1500 None
- 101. LDS-Alfa Romeo       |  1500 None
- 100. Eagle-Climax         |  1500 None
-  99. Ensign               |  1500 None
-  98. Forti                |  1500 None
-  97. Lancia               |  1500 None
-  96. Arzani-Volpini       |  1500 None
-  95. Protos               |  1500 None
-  94. Stebro               |  1500 None
-  93. Bugatti              |  1500 None
-  92. BRM-Ford             |  1500 None
-  91. Klenk                |  1500 None
-  90. Life                 |  1500 None
-  89. Spirit               |  1500 None
-  88. Theodore             |  1500 None
-  87. Pacific              |  1500 None
-  86. Simtek               |  1500 None
-  85. BMW Sauber           |  1500 None
-  84. Super Aguri          |  1500 None
-  83. Honda                |  1500 None
-  82. Spyker               |  1500 None
-  81. MF1                  |  1500 None
-  80. Spyker MF1           |  1500 None
-  79. Brawn                |  1500 None
-  78. Eagle                |  1500 None
-  77. ATS                  |  1504 1982-09-25
-  76. RAM                  |  1504 1985-08-18
-  75. Andrea Moda          |  1504 1992-08-16
-  74. Cooper-BRM           |  1507 1968-05-12
-  73. Fondmetal            |  1508 1992-08-16
-  72. Lambo                |  1508 1991-11-03
-  71. Lola                 |  1510 1986-10-12
-  70. Leyton House         |  1511 1991-09-22
-  69. Euro Brun            |  1513 1988-11-13
-  68. Coloni               |  1513 1989-11-05
-  67. Rial                 |  1513 1989-11-05
-  66. AGS                  |  1514 1990-08-12
-  65. Osella               |  1517 1982-01-23
-  64. Dallara              |  1517 1992-08-16
-  63. Onyx                 |  1517 1990-08-12
-  62. Zakspeed             |  1521 1989-07-16
-  61. ERA                  |  1535 1950-05-13
-  60. Toleman              |  1553 1981-08-02
-  59. Fittipaldi           |  1557 1981-08-02
-  58. Cooper               |  1557 1958-10-19
-  57. Marussia             |  1564 2012-10-14
-  56. Brabham-Ford         |  1602 1969-10-19
-  55. Alfa Romeo           |  1606 2021-05-23
-  54. Racing Point         |  1608 2019-04-14
-  53. AlphaTauri           |  1637 2021-05-23
-  52. HWM                  |  1640 1952-06-22
-  51. Manor Marussia       |  1646 2016-08-28
-  50. Haas F1 Team         |  1647 2019-04-14
-  49. Alpine F1 Team       |  1654 2025-06-01
-  48. Aston Martin         |  1654 2024-03-24
-  47. RB F1 Team           |  1661 2025-06-01
-  46. Brabham-Alfa Romeo   |  1685 1979-09-09
-  45. Caterham             |  1716 2014-11-23
-  44. Renault              |  1717 2002-07-28
-  43. Toyota               |  1725 2002-07-28
-  42. Jaguar               |  1751 2002-07-28
-  41. Footwork             |  1754 1994-07-31
-  40. Ligier               |  1763 1994-07-31
-  39. Stewart              |  1769 1998-08-16
-  38. Larrousse            |  1769 1994-07-31
-  37. BAR                  |  1773 2002-07-28
-  36. Prost                |  1775 1999-04-11
-  35. Minardi              |  1789 1994-07-10
-  34. Virgin               |  1837 2011-11-13
-  33. Lotus                |  1860 2011-11-13
-  32. Jordan               |  1878 1994-07-31
-  31. Sauber               |  1896 2015-06-07
-  30. Shadow-Ford          |  1904 1975-06-22
-  29. Lotus F1             |  1957 2015-06-07
-  28. Arrows               |  1982 1981-08-02
-  27. HRT                  |  2002 2012-09-09
-  26. Benetton             |  2145 1994-09-11
-  25. Lotus-BRM            |  2262 1963-10-27
-  24. Toro Rosso           |  2268 2012-10-14
-  23. Force India          |  2478 2016-10-30
-  22. Shadow               |  2517 1973-10-07
-  21. Red Bull             |  2558 2012-10-14
-  20. Mercedes             |  2832 2016-10-30
-  19. Brabham-Repco        |  2897 1968-09-08
-  18. Surtees              |  3085 1977-01-23
-  17. Talbot-Lago          |  3372 1951-10-28
-  16. Kurtis Kraft         |  3384 1959-05-30
-  15. Brabham-Climax       |  3406 1965-10-24
-  14. March-Ford           |  3477 1971-09-05
-  13. Ferrari              |  3481 1953-08-23
-  12. Lotus-Climax         |  3849 1963-06-09
-  11. Cooper-Climax        |  3966 1960-11-20
-  10. Maserati             |  4038 1958-07-06
-   9. Cooper-Maserati      |  4069 1967-10-22
-   8. Lotus-Ford           |  4152 1969-10-19
-   7. BRM                  |  4309 1974-04-28
-   6. Brabham              |  4433 1975-01-26
-   5. March                |  5854 1977-08-28
-   4. Tyrrell              |  6162 1991-11-03
-   3. McLaren              |  6163 1991-11-03
-   2. Team Lotus           |  6163 1991-11-03
-   1. Williams             |  6163 1991-11-03
+ 212. Bugatti              |  1200 None
+ 211. Ferguson             |  1200 None
+ 210. Adams                |  1200 None
+ 209. Snowberger           |  1200 None
+ 208. Elder                |  1200 None
+ 207. Sutton               |  1200 None
+ 206. MBM                  |  1200 None
+ 205. EMW                  |  1200 None
+ 204. Shannon              |  1200 None
+ 203. Politoys             |  1200 None
+ 202. Connew               |  1200 None
+ 201. Milano               |  1200 None
+ 200. Eagle                |  1200 None
+ 199. Derrington           |  1204 1964-09-06
+ 198. Wetteroth            |  1204 1950-05-30
+ 197. RE                   |  1206 1965-01-01
+ 196. Klenk                |  1206 1954-08-01
+ 195. Cooper-Ford          |  1207 1965-07-10
+ 194. BRM-Ford             |  1207 1969-08-03
+ 193. Cooper-Alfa Romeo    |  1208 1962-12-29
+ 192. Olson                |  1210 1950-05-30
+ 191. Aston Butterworth    |  1210 1952-09-07
+ 190. Turner               |  1211 1953-05-30
+ 189. Frazer Nash          |  1213 1952-07-19
+ 188. Del Roy              |  1214 1953-05-30
+ 187. Rae                  |  1214 1950-05-30
+ 186. Cooper-ATS           |  1215 1967-07-15
+ 185. Shadow-Matra         |  1216 1975-09-07
+ 184. De Tomaso-Ferrari    |  1216 1963-09-08
+ 183. Christensen          |  1217 1960-05-30
+ 182. Protos               |  1218 1967-08-06
+ 181. McGuire              |  1221 1977-07-16
+ 180. Arzani-Volpini       |  1225 1955-09-11
+ 179. Apollon              |  1225 1977-09-11
+ 178. Fry                  |  1226 1959-07-18
+ 177. De Tomaso-Alfa Romeo |  1226 1961-09-10
+ 176. Lotus-Maserati       |  1226 1961-09-10
+ 175. De Tomaso-Osca       |  1227 1962-09-16
+ 174. Sherman              |  1227 1952-05-30
+ 173. LDS-Climax           |  1228 1967-01-02
+ 172. Emeryson             |  1229 1962-09-16
+ 171. Cisitalia            |  1229 1952-09-07
+ 170. Stebro               |  1229 1963-10-06
+ 169. Kauhsen              |  1231 1979-05-13
+ 168. Pawl                 |  1231 1951-05-30
+ 167. Amon                 |  1231 1974-09-08
+ 166. Bromme               |  1232 1951-05-30
+ 165. Hall                 |  1233 1951-05-30
+ 164. Lancia               |  1233 1955-05-22
+ 163. Ewing                |  1238 1950-05-30
+ 162. ENB                  |  1239 1962-08-05
+ 161. McLaren-Serenissima  |  1239 1966-07-16
+ 160. OSCA                 |  1241 1953-09-13
+ 159. Tec-Mec              |  1241 1959-12-12
+ 158. LDS-Alfa Romeo       |  1242 1965-01-01
+ 157. Alta                 |  1242 1952-07-19
+ 156. Pankratz             |  1242 1954-05-31
+ 155. Cooper-OSCA          |  1243 1959-12-12
+ 154. Langley              |  1243 1950-05-30
+ 153. Lotus                |  1244 2011-09-11
+ 152. Cooper-Ferrari       |  1245 1966-08-07
+ 151. Cooper-Borgward      |  1245 1959-12-12
+ 150. Lotus-Borgward       |  1246 1963-08-04
+ 149. Gilby                |  1254 1963-08-04
+ 148. De Tomaso            |  1256 1970-09-20
+ 147. LDS                  |  1256 1963-12-28
+ 146. Tecno                |  1257 1973-05-20
+ 145. Maki                 |  1258 1976-10-24
+ 144. Kojima               |  1261 1977-10-23
+ 143. Lyncar               |  1261 1975-07-19
+ 142. Spyker MF1           |  1263 2006-10-22
+ 141. Virgin               |  1263 2011-08-28
+ 140. Meskowski            |  1263 1960-05-30
+ 139. AFM                  |  1268 1952-08-03
+ 138. Marchese             |  1269 1950-05-30
+ 137. JBW                  |  1273 1960-07-16
+ 136. Spyker               |  1275 2007-10-07
+ 135. Scirocco             |  1277 1963-06-09
+ 134. Veritas              |  1277 1952-08-03
+ 133. Rebaque              |  1277 1979-10-07
+ 132. HWM                  |  1279 1952-08-17
+ 131. Token                |  1280 1974-08-04
+ 130. Eagle-Weslake        |  1280 1967-08-27
+ 129. Nichels              |  1280 1950-05-30
+ 128. Dunn                 |  1281 1959-05-30
+ 127. Andrea Moda          |  1281 1992-07-26
+ 126. BMW                  |  1281 1953-08-02
+ 125. Behra-Porsche        |  1283 1960-09-04
+ 124. Deidt                |  1284 1951-05-30
+ 123. Talbot-Lago          |  1285 1951-06-17
+ 122. Simca                |  1290 1952-07-19
+ 121. Caterham             |  1290 2013-10-06
+ 120. Trevis               |  1291 1955-05-30
+ 119. Simtek               |  1291 1994-07-10
+ 118. Stevens              |  1291 1954-05-31
+ 117. Eagle-Climax         |  1293 1966-10-23
+ 116. ERA                  |  1294 1950-05-21
+ 115. HRT                  |  1294 2012-11-25
+ 114. LEC                  |  1295 1977-07-16
+ 113. Marussia             |  1297 2014-07-20
+ 112. Schroeder            |  1297 1951-05-30
+ 111. Lotus-Pratt &amp; Whitney |  1300 1971-09-05
+ 110. Scarab               |  1303 1960-11-20
+ 109. Bellasi              |  1304 1971-09-05
+ 108. Boro                 |  1310 1976-05-30
+ 107. Cooper-BRM           |  1314 1968-11-03
+ 106. Manor Marussia       |  1314 2015-10-25
+ 105. McLaren-BRM          |  1316 1968-09-08
+ 104. Alpine F1 Team       |  1317 2022-07-31
+ 103. Aston Martin         |  1318 2023-06-04
+ 102. March-Ford           |  1324 1971-07-17
+ 101. McLaren-Alfa Romeo   |  1327 1970-09-06
+ 100. RB F1 Team           |  1330 2025-05-25
+  99. BRP                  |  1330 1963-06-30
+  98. Watson               |  1333 1959-05-30
+  97. Super Aguri          |  1340 2007-06-10
+  96. Haas F1 Team         |  1340 2020-10-11
+  95. Lambo                |  1341 1991-11-03
+  94. RAM                  |  1344 1984-05-20
+  93. Cooper-Castellotti   |  1345 1960-11-20
+  92. MF1                  |  1346 2006-06-11
+  91. Martini              |  1347 1978-08-13
+  90. Spirit               |  1350 1984-04-07
+  89. Lesovsky             |  1357 1960-05-30
+  88. Onyx                 |  1359 1989-07-16
+  87. March-Alfa Romeo     |  1359 1971-10-03
+  86. Brabham-Climax       |  1364 1964-07-11
+  85. Moore                |  1364 1951-05-30
+  84. Trojan               |  1367 1974-09-08
+  83. Iso Marlboro         |  1372 1973-08-19
+  82. Cooper-Maserati      |  1375 1969-05-18
+  81. Connaught            |  1378 1953-06-21
+  80. Gordini              |  1379 1953-06-21
+  79. Brabham-BRM          |  1382 1965-07-10
+  78. Brabham-Alfa Romeo   |  1383 1976-08-01
+  77. Phillips             |  1384 1958-05-30
+  76. Shadow-Ford          |  1392 1975-09-07
+  75. Life                 |  1395 1990-09-30
+  74. Kuzma                |  1397 1955-05-30
+  73. Forti                |  1398 1996-05-05
+  72. Rial                 |  1398 1988-07-03
+  71. Euro Brun            |  1401 1990-03-25
+  70. Leyton House         |  1407 1991-09-22
+  69. Prost                |  1411 1999-09-26
+  68. Embassy Hill         |  1415 1975-08-17
+  67. Zakspeed             |  1417 1987-05-03
+  66. Jaguar               |  1417 2002-03-31
+  65. Lotus-BRM            |  1422 1966-10-02
+  64. Epperly              |  1444 1959-05-30
+  63. Coloni               |  1452 1990-11-04
+  62. Maserati             |  1464 1954-06-20
+  61. Wolf                 |  1466 1978-07-30
+  60. Vanwall              |  1477 1958-06-15
+  59. Lotus-Ford           |  1481 1968-05-26
+  58. Parnelli             |  1482 1975-08-03
+  57. Kurtis Kraft         |  1484 1953-05-30
+  56. Alfa Romeo           |  1485 1984-04-07
+  55. McLaren-Ford         |  1488 1968-10-06
+  54. Cooper-Climax        |  1491 1959-12-12
+  53. Toyota               |  1501 2006-09-10
+  52. Brabham-Ford         |  1505 1969-10-19
+  51. Osella               |  1514 1989-10-01
+  50. Lola                 |  1515 1975-01-26
+  49. Toleman              |  1519 1984-06-17
+  48. Stewart              |  1523 1999-10-31
+  47. Larrousse            |  1526 1988-08-07
+  46. ATS                  |  1529 1981-05-03
+  45. Lotus-Climax         |  1536 1964-05-24
+  44. Hesketh              |  1542 1976-10-24
+  43. Porsche              |  1547 1963-12-28
+  42. Lotus F1             |  1548 2013-04-21
+  41. Minardi              |  1583 1994-08-28
+  40. Ensign               |  1585 1981-05-31
+  39. Fittipaldi           |  1603 1982-09-25
+  38. Surtees              |  1604 1977-06-05
+  37. Shadow               |  1607 1978-01-15
+  36. BRM                  |  1619 1963-05-26
+  35. March                |  1622 1982-04-04
+  34. Honda                |  1631 2006-10-22
+  33. Matra                |  1640 1971-04-18
+  32. Matra-Ford           |  1648 1969-05-04
+  31. Pacific              |  1653 1995-03-26
+  30. Cooper               |  1664 1958-07-19
+  29. Toro Rosso           |  1672 2016-06-12
+  28. Brabham-Repco        |  1692 1967-08-27
+  27. Racing Point         |  1734 2020-11-01
+  26. Theodore             |  1747 1982-07-25
+  25. Penske               |  1751 1977-07-16
+  24. Sauber               |  1804 2001-07-15
+  23. AlphaTauri           |  1836 2022-06-12
+  22. AGS                  |  1881 1991-03-24
+  21. Merzario             |  1898 1979-10-07
+  20. Fondmetal            |  1919 1991-11-03
+  19. Arrows               |  1949 1989-08-13
+  18. Dallara              |  1970 1989-06-18
+  17. Footwork             |  1972 1992-10-25
+  16. BAR                  |  1988 2004-09-12
+  15. Ligier               |  2006 1978-09-10
+  14. Jordan               |  2021 1999-09-12
+  13. Brabham              |  2050 1975-05-11
+  12. Brawn                |  2076 2009-10-04
+  11. Tyrrell              |  2100 1982-09-25
+  10. Team Lotus           |  2161 1987-09-27
+   9. Benetton             |  2238 1995-07-30
+   8. BMW Sauber           |  2263 2008-10-19
+   7. Williams             |  2394 1987-10-18
+   6. Force India          |  2414 2013-03-17
+   5. Renault              |  2484 2006-06-25
+   4. Mercedes             |  2793 2019-07-14
+   3. Ferrari              |  2897 2024-10-27
+   2. Red Bull             |  2953 2023-06-18
+   1. McLaren              |  3028 2024-09-22

@@ -3,6 +3,11 @@ from kagglehub import KaggleDatasetAdapter
 from datetime import datetime
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from math import exp
+
+mpl.rcParams['lines.linewidth'] = 0.5
+mpl.rcParams['lines.markersize'] = 2
 
 KAGGLE_PATH = "jtrotman/formula-1-race-data"
 FILES = ["constructor_results.csv",
@@ -16,34 +21,39 @@ FILES = ["constructor_results.csv",
          "sprint_results.csv",
          "status.csv"]
 
-BASE_DRIVER_RATING = 1500
-BASE_TEAM_RATING = 1500
+PLOT_COLORMAP = "nipy_spectral"
 
-PENALTY_FACTOR = 0.01
+BASE_DRIVER_RATING = 1200
+BASE_TEAM_RATING = 1200
 
-DIFF_TEAMMATES = 0.65
-RACE_BONUS = 0.15
-QUALI_BONUS = 0.05
-SPRINT_BONUS = 0.025
-DIFF_RACE = 0.1
+PENALTY_FACTOR = 0.1
+
+DIFF_TEAMMATES = 0.5
+RACE_BONUS = 0.4
+QUALI_BONUS = 0.3
+SPRINT_BONUS = 0.05
+DIFF_RACE = 0.15
 DIFF_SPRINT = 0.025
 
-TEAM_RACE_WEIGHT = 0.5
-TEAM_QUALI_WEIGHT = 0.35
-TEAM_SPRINT_WEIGHT = 0.15
+TEAM_RACE_WEIGHT = 0.6
+TEAM_QUALI_WEIGHT = 0.3
+TEAM_SPRINT_WEIGHT = 0.1
 
 ROOKIE_RATING_COUNT = 7
-ROOKIE_MODIFIER = 2
+ROOKIE_MODIFIER = 1.5
 
-SWING_MULTIPLIER = 6
-SWING_MULTIPLIER_TEAM = 700
+DIFF_TEAM_GROWTH_WEIGHT = 3
+DIFF_TEAM_DUMPER_WEIGHT = 2
+
+SWING_MULTIPLIER = 10
+SWING_MULTIPLIER_TEAM = 300
 
 RESET_TEAM_RATINGS_SEASON = False
 RERATE_TEAM_RATINGS_SEASON = False
 RESET_TEAM_REENTRY_RATINGS = True
 
-TEAM_RATING_DECAY_NUM_RACES = 20
-DRIVER_RATING_DECAY_NUM_RACES = 80
+TEAM_RATING_DECAY_NUM_RACES = 5 # 0.2 * ~25
+DRIVER_RATING_DECAY_NUM_RACES = 100 # 4 * ~25
 
 def load_data():
     print("Loading data from Kaggle dataset...")
@@ -71,6 +81,8 @@ class Driver:
         return  f"{(self.forename + " " + self.surname):<40} | {round(self.ratings[-1][0]):>5} " \
                 f"Peak: {round(max(self.ratings, key=lambda y: y[0])[0]):>5} " \
                 f"{max(self.ratings, key=lambda y: y[0])[1] if max(self.ratings, key=lambda y: y[0])[1] else 'N/A'}"
+    def __hash__(self):
+        return hash(self.id)
 
 @dataclass
 class Team:
@@ -85,6 +97,8 @@ class Team:
         return  f"{self.name:<40} | {round(self.ratings[-1][0]):>5} " \
                 f"Peak: {round(max(self.ratings, key=lambda y: y[0])[0]):>5} " \
                 f"{max(self.ratings, key=lambda y: y[0])[1] if max(self.ratings, key=lambda y: y[0])[1] else 'N/A'}"
+    def __hash__(self):
+        return hash(self.id)
 
 @dataclass
 class Race:
@@ -336,7 +350,7 @@ def distribution_function(x, a, N):
     except ValueError:
         return 0
     if x <= 0:
-        return 0
+        return N
     elif x <= a / 2:
         return N * ((1 - (x - 1) / (a / 2 - 1)) ** 3)
     elif x <= a:
@@ -400,8 +414,9 @@ def compute_team_rating_change(teams, team_id, teams_weighted_pos):
     if best_pos == worst_pos:
         return 0
 
-    middle_pos = (best_pos + worst_pos) / 2
-    raw_change = team_pos - middle_pos
+    teams_weighted_pos.sort(key=lambda x: x[1])
+    middle_pos = teams_weighted_pos[len(teams_weighted_pos)//2][1]
+    raw_change = middle_pos - team_pos + len(teams_weighted_pos)
     raw_change = raw_change / (worst_pos - best_pos)
 
     team = next((t for t in teams if t.id == team_id), None)
@@ -484,6 +499,12 @@ def reset_team_reentry_ratings(seasons, season, teams):
         if team.id in current_season_team_ids and team.id not in previous_season_team_ids:
             team.ratings.append((BASE_TEAM_RATING, None))
     return teams
+
+def get_driver_by_id(drivers, driver_id):
+    for driver in drivers:
+        if driver.id == driver_id:
+            return driver
+    return None
 
 def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
     for driver in drivers:
@@ -572,18 +593,13 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                 driver_team_rating = driver_team_rating.ratings[-1][0] if driver_team_rating else BASE_TEAM_RATING
                 diff_team_performance = driver_team_rating - BASE_TEAM_RATING
 
-                sign = 1
-                if driver_team_rating < BASE_TEAM_RATING:
-                    sign = -1
-                diff_team_performance = distribution_function(abs(diff_team_performance), 1000, 1) * sign
-
                 if driver_result[1] not in teams_positions_races:
                     teams_positions_races[driver_result[1]] = []
                 try:
                     race_pos = int(driver_result[2])
                 except (ValueError, TypeError):
                     race_pos = numDrivers
-                teams_positions_races[driver_result[1]].append(race_pos)
+                teams_positions_races[driver_result[1]].append((driver_result[0], race_pos))
 
                 if driver_result[1] not in teams_positions_qualis:
                     teams_positions_qualis[driver_result[1]] = []
@@ -592,7 +608,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                         quali_pos = int(quali_result[2])
                     except (ValueError, TypeError):
                         quali_pos = numDrivers
-                    teams_positions_qualis[driver_result[1]].append(quali_pos)
+                    teams_positions_qualis[driver_result[1]].append((driver_result[0], quali_pos))
 
                 if driver_result[1] not in teams_positions_sprints:
                     teams_positions_sprints[driver_result[1]] = []
@@ -601,7 +617,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                         sprint_pos = int(sprint_result[2])
                     except (ValueError, TypeError):
                         sprint_pos = numDrivers
-                    teams_positions_sprints[driver_result[1]].append(sprint_pos)
+                    teams_positions_sprints[driver_result[1]].append((driver_result[0], sprint_pos))
 
                 driver = next((d for d in drivers if d.id == driver_result[0]), None)
                 if driver:
@@ -614,13 +630,31 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                     if penalty and len(driver.ratings) >= ROOKIE_RATING_COUNT:
                         rating_penalty = driver_rating*PENALTY_FACTOR
 
-                    if diff_team_performance > 0:
-                        if race_bonus < 0:
-                            race_bonus *= 0.5
-                        if quali_bonus < 0:
-                            quali_bonus *= 0.3
-                        if sprint_bonus < 0:
-                            sprint_bonus *= 0.5
+                    diff_team_multiplier_growth = exp(-DIFF_TEAM_GROWTH_WEIGHT * diff_team_performance / BASE_TEAM_RATING)
+                    diff_team_multiplier_dumper = exp(DIFF_TEAM_DUMPER_WEIGHT * diff_team_performance / BASE_TEAM_RATING)
+
+                    if diff_team_multiplier_growth < 0.5:
+                        diff_team_multiplier_growth = 0.5
+                    if diff_team_multiplier_dumper < 0.5:
+                        diff_team_multiplier_dumper = 0.5
+
+                    if diff_team_multiplier_growth > 1.5:
+                        diff_team_multiplier_growth = 1.5
+                    if diff_team_multiplier_dumper > 1.5:
+                        diff_team_multiplier_dumper = 1.5
+
+                    if race_bonus < 0:
+                        race_bonus *= diff_team_multiplier_dumper
+                    else:
+                        race_bonus *= diff_team_multiplier_growth
+                    if quali_bonus < 0:
+                        quali_bonus *= diff_team_multiplier_dumper
+                    else:
+                        quali_bonus *= diff_team_multiplier_growth
+                    if sprint_bonus < 0:
+                        sprint_bonus *= diff_team_multiplier_dumper
+                    else:
+                        sprint_bonus *= diff_team_multiplier_growth
 
                     if diff_teammates < 0:
                         rookie_multiplier_diff_teammates = 1
@@ -659,37 +693,42 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                                     + sprint_bonus*SPRINT_BONUS * rookie_multiplier_sprint
                                     + diff_race*DIFF_RACE * rookie_multiplier_diff_race
                                     + diff_sprint*DIFF_SPRINT * rookie_multiplier_diff_sprint
-                                    - rating_penalty
-                                ) * SWING_MULTIPLIER
-                    if diff_team_performance != 0:
-                        rating_change *= 1 + diff_team_performance
+                                ) * SWING_MULTIPLIER - rating_penalty
                     new_driver_rating = driver_rating + rating_change - decay
 
                     driver.ratings.append((new_driver_rating, race.date))
 
-            teams_weighted_pos = [] # (team_id, weighted_position)
-
+            teams_weighted_pos = []
             team_decays = compute_teams_rating_decay(teams, TEAM_RATING_DECAY_NUM_RACES, num_races_weight)
             for team_id, team_positions_race in teams_positions_races.items():
                 team = next((t for t in teams if t.id == team_id), None)
                 if team:
                     race_avg = 0
                     for position in team_positions_race:
-                        race_avg += position
+                        driver_rating = get_driver_by_id(drivers, position[0]).ratings[-1][0]
+                        driver_rating_deviation = driver_rating - BASE_DRIVER_RATING
+                        scaling_factor = (BASE_DRIVER_RATING + driver_rating_deviation) / BASE_DRIVER_RATING
+                        race_avg += position[1] * scaling_factor
                     if len(team_positions_race) != 0:
-                        race_avg = len(team_positions_race)
+                        race_avg /= len(team_positions_race)
                     quali_avg = 0
                     if team_id in teams_positions_qualis:
                         for position in teams_positions_qualis[team_id]:
-                            quali_avg += position
+                            driver_rating = get_driver_by_id(drivers, position[0]).ratings[-1][0]
+                            driver_rating_deviation = driver_rating - BASE_DRIVER_RATING
+                            scaling_factor = (BASE_DRIVER_RATING + driver_rating_deviation) / BASE_DRIVER_RATING
+                            quali_avg += position[1] * scaling_factor
                         if len(teams_positions_qualis[team_id]) != 0:
-                            quali_avg = len(teams_positions_qualis[team_id])
+                            quali_avg /= len(teams_positions_qualis[team_id])
                     sprint_avg = 0
                     if team_id in teams_positions_sprints:
                         for position in teams_positions_sprints[team_id]:
-                            sprint_avg += position
+                            driver_rating = get_driver_by_id(drivers, position[0]).ratings[-1][0]
+                            driver_rating_deviation = driver_rating - BASE_DRIVER_RATING
+                            scaling_factor = (BASE_DRIVER_RATING + driver_rating_deviation) / BASE_DRIVER_RATING
+                            sprint_avg = position[1] * scaling_factor
                         if len(teams_positions_sprints[team_id]) != 0:
-                            sprint_avg = len(teams_positions_sprints[team_id])
+                            sprint_avg /= len(teams_positions_sprints[team_id])
                     team_weighted_pos = (
                                       + race_avg*TEAM_RACE_WEIGHT*num_races_weight
                                       + quali_avg*TEAM_QUALI_WEIGHT*num_races_weight
@@ -712,7 +751,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
 
     return drivers, teams
 
-def plot_team_rating(team):
+def show_plot_team_rating(team):
     ratings_with_dates = []
     for rating in team.ratings:
         if rating[1] is not None:
@@ -728,7 +767,7 @@ def plot_team_rating(team):
     plt.ylabel("Rating")
     plt.xticks(rotation=45)
     plt.grid()
-    plt.tight_layout()
+    plt.tight_layout(rect=(0, 0, 0.95, 1))
     plt.show()
 
 def get_team_by_name(teams, name):
@@ -744,7 +783,13 @@ def get_driver_by_name(drivers, name):
             return driver
     return None
 
-def plot_teams_rating(teams):
+def get_team_by_id(teams, team_id):
+    for team in teams:
+        if team.id == team_id:
+            return team
+    return None
+
+def show_plot_teams_rating(teams):
     ratings_with_dates = {}
     for team in teams:
         ratings_with_dates[team.name] = []
@@ -754,18 +799,19 @@ def plot_teams_rating(teams):
     ratings = {team_name: [rating[0] for rating in ratings_with_dates[team_name]] for team_name in ratings_with_dates}
     dates = {team_name: [rating[1] for rating in ratings_with_dates[team_name] if rating[1] is not None] for team_name in ratings_with_dates}
     plt.figure(figsize=(10, 5))
-    for team_name in ratings:
-        plt.plot(dates[team_name], ratings[team_name], marker='o', label=team_name)
+    colors = plt.get_cmap(PLOT_COLORMAP, len(ratings))
+    for i, team_name in enumerate(ratings):
+        plt.plot(dates[team_name], ratings[team_name], marker='o', label=team_name, color=colors(i))
     plt.title(f"Rating Progression for Teams")
     plt.xlabel("Date")
     plt.ylabel("Rating")
     plt.xticks(rotation=45)
     plt.grid()
-    plt.legend()
-    plt.tight_layout()
+    plt.legend(loc='upper left', bbox_to_anchor=(1.02, 1), borderaxespad=0)
+    plt.tight_layout(rect=(0, 0, 0.95, 1))
     plt.show()
 
-def plot_driver_rating(driver):
+def show_plot_driver_rating(driver):
     ratings_with_dates = []
     for rating in driver.ratings:
         if rating[1] is not None:
@@ -779,10 +825,10 @@ def plot_driver_rating(driver):
     plt.ylabel("Rating")
     plt.xticks(rotation=45)
     plt.grid()
-    plt.tight_layout()
+    plt.tight_layout(rect=(0, 0, 0.95, 1))
     plt.show()
 
-def plot_drivers_rating(drivers):
+def show_plot_drivers_rating(drivers):
     ratings_with_dates = {}
     for driver in drivers:
         ratings_with_dates[driver.forename + " " + driver.surname] = []
@@ -792,16 +838,107 @@ def plot_drivers_rating(drivers):
     ratings = {driver_name: [rating[0] for rating in ratings_with_dates[driver_name]] for driver_name in ratings_with_dates}
     dates = {driver_name: [rating[1] for rating in ratings_with_dates[driver_name] if rating[1] is not None] for driver_name in ratings_with_dates}
     plt.figure(figsize=(10, 5))
-    for driver_name in ratings:
-        plt.plot(dates[driver_name], ratings[driver_name], marker='o', label=driver_name)
+    colors = plt.get_cmap(PLOT_COLORMAP, len(ratings))
+    for i, driver_name in enumerate(ratings):
+        plt.plot(dates[driver_name], ratings[driver_name], marker='o', label=driver_name, color=colors(i))
     plt.title(f"Rating Progression for Drivers")
     plt.xlabel("Date")
     plt.ylabel("Rating")
     plt.xticks(rotation=45)
     plt.grid()
-    plt.legend()
-    plt.tight_layout()
+    plt.legend(loc='upper left', bbox_to_anchor=(1.02, 1), borderaxespad=0)
+    plt.tight_layout(rect=(0, 0, 0.95, 1))
     plt.show()
+
+def save_plot_driver_rating(driver):
+    ratings_with_dates = []
+    for rating in driver.ratings:
+        if rating[1] is not None:
+            ratings_with_dates.append((rating[0], rating[1]))
+    ratings = [rating[0] for rating in ratings_with_dates]
+    dates = [rating[1] for rating in ratings_with_dates if rating[1] is not None]
+    plt.figure(figsize=(10, 5))
+    plt.plot(dates, ratings, marker='o')
+    plt.title(f"Rating Progression for {driver.forename} {driver.surname}")
+    plt.xlabel("Date")
+    plt.ylabel("Rating")
+    plt.xticks(rotation=45)
+    plt.grid()
+    plt.tight_layout(rect=(0, 0, 0.95, 1))
+    plt.savefig(f"ratings/{driver.forename}_{driver.surname}_rating_progression.png", dpi=300)
+    plt.close()
+
+def save_plot_drivers_rating(drivers, name="drivers_rating_progression"):
+    ratings_with_dates = {}
+    for driver in drivers:
+        ratings_with_dates[driver.forename + " " + driver.surname] = []
+        for rating in driver.ratings:
+            if rating[1] is not None:
+                ratings_with_dates[driver.forename + " " + driver.surname].append((rating[0], rating[1]))
+    ratings = {driver_name: [rating[0] for rating in ratings_with_dates[driver_name]] for driver_name in ratings_with_dates}
+    dates = {driver_name: [rating[1] for rating in ratings_with_dates[driver_name] if rating[1] is not None] for driver_name in ratings_with_dates}
+    plt.figure(figsize=(10, 5))
+    colors = plt.get_cmap(PLOT_COLORMAP, len(ratings))
+    for i, driver_name in enumerate(ratings):
+        plt.plot(dates[driver_name], ratings[driver_name], marker='o', label=driver_name, color=colors(i))
+    plt.title(f"Rating Progression for Drivers")
+    plt.xlabel("Date")
+    plt.ylabel("Rating")
+    plt.xticks(rotation=45)
+    plt.grid()
+    plt.legend(loc='upper left', bbox_to_anchor=(1.02, 1), borderaxespad=0)
+    plt.tight_layout(rect=(0, 0, 0.95, 1))
+    plt.savefig(f"ratings/{name}.png", dpi=300)
+    plt.close()
+
+def save_plot_team_rating(team):
+    ratings_with_dates = []
+    for rating in team.ratings:
+        if rating[1] is not None:
+            ratings_with_dates.append((rating[0], rating[1]))
+
+    ratings = [rating[0] for rating in ratings_with_dates]
+    dates = [rating[1] for rating in ratings_with_dates if rating[1] is not None]
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(dates, ratings, marker='o')
+    plt.title(f"Rating Progression for {team.name}")
+    plt.xlabel("Date")
+    plt.ylabel("Rating")
+    plt.xticks(rotation=45)
+    plt.grid()
+    plt.tight_layout(rect=(0, 0, 0.95, 1))
+    plt.savefig(f"ratings/{team.name}_rating_progression.png", dpi=300)
+    plt.close()
+
+def save_plot_teams_rating(teams, name="teams_rating_progression"):
+    ratings_with_dates = {}
+    for team in teams:
+        ratings_with_dates[team.name] = []
+        for rating in team.ratings:
+            if rating[1] is not None:
+                ratings_with_dates[team.name].append((rating[0], rating[1]))
+    ratings = {team_name: [rating[0] for rating in ratings_with_dates[team_name]] for team_name in ratings_with_dates}
+    dates = {team_name: [rating[1] for rating in ratings_with_dates[team_name] if rating[1] is not None] for team_name in ratings_with_dates}
+    plt.figure(figsize=(10, 5))
+    colors = plt.get_cmap(PLOT_COLORMAP, len(ratings))
+    for i, team_name in enumerate(ratings):
+        plt.plot(dates[team_name], ratings[team_name], marker='o', label=team_name, color=colors(i))
+    plt.title(f"Rating Progression for Teams")
+    plt.xlabel("Date")
+    plt.ylabel("Rating")
+    plt.xticks(rotation=45)
+    plt.grid()
+    plt.legend(loc='upper left', bbox_to_anchor=(1.02, 1), borderaxespad=0)
+    plt.tight_layout(rect=(0, 0, 0.95, 1))
+    plt.savefig(f"ratings/{name}.png", dpi=300)
+    plt.close()
+
+def print_driver_rating(driver):
+    print(f"Rating Progression for {driver.forename} {driver.surname}:")
+    for rating in driver.ratings:
+        date_str = rating[1].strftime('%Y-%m-%d') if rating[1] else 'N/A'
+        print(f"Rating: {round(rating[0])}, Date: {date_str}")
 
 def save_ratings(teams, drivers):
     drivers.sort(key=lambda x: x.ratings[-1][0])
@@ -838,32 +975,42 @@ def save_ratings(teams, drivers):
             f.write(line)
             pos -= 1
 
-def print_today_grid(teams, drivers, races):
-    print("Today's grid:")
+def get_last_race_drivers(drivers, races):
     races.sort(key=lambda x: x.date, reverse=True)
     last_race = races[0]
     last_race_drivers = set()
     for result in last_race.results:
-        if result[0] not in last_race_drivers:
-            last_race_drivers.add(result[0])
+        driver = get_driver_by_id(drivers, result[0])
+        if driver not in last_race_drivers:
+            last_race_drivers.add(driver)
+    return list(last_race_drivers)
 
+def get_last_race_teams(teams, races):
+    races.sort(key=lambda x: x.date, reverse=True)
+    last_race = races[0]
+    last_race_teams = set()
+    for result in last_race.results:
+        team = get_team_by_id(teams, result[1])
+        if team not in last_race_teams:
+            last_race_teams.add(team)
+    return list(last_race_teams)
+
+def print_today_grid(teams, drivers, races):
+    print("Today's grid:")
+    last_race_drivers = get_last_race_drivers(drivers, races)
     num_current_drivers = len(last_race_drivers)
     drivers.sort(key=lambda x: x.ratings[-1][0])
     for driver in drivers:
-        if driver.id in last_race_drivers:
+        if driver in last_race_drivers:
             print(f"{num_current_drivers:>2}. {driver}")
             num_current_drivers -= 1
 
     print("Today's teams:")
-    last_race_teams = set()
-    for result in last_race.results:
-        if result[1] not in last_race_teams:
-            last_race_teams.add(result[1])
-
+    last_race_teams = get_last_race_teams(teams, races)
     num_current_teams = len(last_race_teams)
     teams.sort(key=lambda x: x.ratings[-1][0])
     for team in teams:
-        if team.id in last_race_teams:
+        if team in last_race_teams:
             print(f"{num_current_teams:>2}. {team}")
             num_current_teams -= 1
 
@@ -886,7 +1033,7 @@ if __name__ == "__main__":
 
     print_today_grid(teams, drivers, races)
 
-    plot_drivers_rating([
-        get_driver_by_name(drivers, "Robert Kubica"),
-        get_driver_by_name(drivers, "Max Verstappen"),
-    ])
+    save_plot_drivers_rating(get_last_race_drivers(drivers, races), name="current_drivers_rating_progression")
+    save_plot_teams_rating(get_last_race_teams(teams, races), name="current_teams_rating_progression")
+
+    show_plot_driver_rating(get_driver_by_name(drivers, "Mick Schumacher"))
