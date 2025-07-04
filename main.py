@@ -33,6 +33,8 @@ if __name__ == "__main__":
 
     #f1ratings.show_plot_driver_rating("Max Verstappen", datetime(2014, 1, 1).date())
 
+    #f1ratings.show_plot_team_rating("Ferrari")
+
     #f1ratings.show_plot_team_and_driver("Red Bull", "Max Verstappen", datetime(2023, 1, 1).date())
 
     #f1ratings.show_plot_teams_and_drivers(

@@ -28,7 +28,11 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
         if RESET_TEAM_REENTRY_RATINGS:
             teams = reset_team_reentry_ratings(seasons, season, teams)
 
-        num_races_weight = most_races_in_season / len(season.races)
+        season_len = len(season.races)
+        if season.year == datetime.now().year:
+            season_len = CURRENT_SEASON_LENGTH
+        num_races_weight = most_races_in_season / season_len
+        num_races_weight_scaled = influence_function(num_races_weight, a=2.9, b=0.6, c=0.19)
 
         for race in season.races:
             print(f"\tComputing ratings for race {race.name}...")
@@ -118,15 +122,19 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                         sprint_pos = numDrivers
                     teams_positions_sprints[driver_result[1]].append((driver_result[0], sprint_pos))
 
+                rookie_rating_count_scaled = ROOKIE_RATING_COUNT / num_races_weight_scaled
+                if rookie_rating_count_scaled < 2:
+                    rookie_rating_count_scaled = 2
+
                 driver = next((d for d in drivers if d.id == driver_result[0]), None)
                 if driver:
                     driver_rating = driver.ratings[-1][0]
-                    if len(driver.ratings) < ROOKIE_RATING_COUNT:
+                    if len(driver.ratings) < rookie_rating_count_scaled and len(driver.ratings) < ROOKIE_RATING_COUNT:
                         rookie_multiplier = 1 + ROOKIE_MODIFIER * (1 / (ROOKIE_RATING_COUNT - len(driver.ratings)))
                     else:
                         rookie_multiplier = 1
                     rating_penalty = 0
-                    if penalty and len(driver.ratings) >= ROOKIE_RATING_COUNT:
+                    if penalty and len(driver.ratings) >= rookie_rating_count_scaled:
                         rating_penalty = driver_rating*PENALTY_FACTOR
 
                     diff_team_multiplier_growth = exp(-DIFF_TEAM_GROWTH_WEIGHT * diff_team_performance / BASE_TEAM_RATING)
@@ -192,7 +200,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                                     + sprint_bonus*SPRINT_BONUS * rookie_multiplier_sprint
                                     + diff_race*DIFF_RACE * rookie_multiplier_diff_race
                                     + diff_sprint*DIFF_SPRINT * rookie_multiplier_diff_sprint
-                                ) * SWING_MULTIPLIER - rating_penalty
+                                ) * SWING_MULTIPLIER * num_races_weight_scaled - rating_penalty
                     new_driver_rating = driver_rating + rating_change - decay
 
                     driver.ratings.append((new_driver_rating, race.date))
@@ -206,6 +214,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                     for position in team_positions_race:
                         driver_rating = get_driver_by_id(drivers, position[0]).ratings[-1][0]
                         driver_rating_deviation = driver_rating - BASE_DRIVER_RATING
+                        driver_rating_deviation *= DRIVER_RATING_DEVIATION_MULTIPLIER
                         scaling_factor = (BASE_DRIVER_RATING + driver_rating_deviation) / BASE_DRIVER_RATING
                         race_avg += position[1] * scaling_factor
                     if len(team_positions_race) != 0:
@@ -215,6 +224,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                         for position in teams_positions_qualis[team_id]:
                             driver_rating = get_driver_by_id(drivers, position[0]).ratings[-1][0]
                             driver_rating_deviation = driver_rating - BASE_DRIVER_RATING
+                            driver_rating_deviation *= DRIVER_RATING_DEVIATION_MULTIPLIER
                             scaling_factor = (BASE_DRIVER_RATING + driver_rating_deviation) / BASE_DRIVER_RATING
                             quali_avg += position[1] * scaling_factor
                         if len(teams_positions_qualis[team_id]) != 0:
@@ -224,6 +234,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                         for position in teams_positions_sprints[team_id]:
                             driver_rating = get_driver_by_id(drivers, position[0]).ratings[-1][0]
                             driver_rating_deviation = driver_rating - BASE_DRIVER_RATING
+                            driver_rating_deviation *= DRIVER_RATING_DEVIATION_MULTIPLIER
                             scaling_factor = (BASE_DRIVER_RATING + driver_rating_deviation) / BASE_DRIVER_RATING
                             sprint_avg = position[1] * scaling_factor
                         if len(teams_positions_sprints[team_id]) != 0:
@@ -245,7 +256,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                         decay = team_decays[team.id]
                     else:
                         decay = 0
-                    new_team_rating = team_rating + rating_change * SWING_MULTIPLIER_TEAM - decay
+                    new_team_rating = team_rating + rating_change * SWING_MULTIPLIER_TEAM * num_races_weight_scaled - decay
                     team.ratings.append((new_team_rating, race.date))
 
     return drivers, teams

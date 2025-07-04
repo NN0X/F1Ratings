@@ -1,4 +1,5 @@
 from .dataclasses import *
+from math import log
 
 def distribution_function(x, a, N):
     try:
@@ -14,6 +15,13 @@ def distribution_function(x, a, N):
         return -N * (((x - a / 2) / (a - a / 2)) ** 3)
     else:
         return 0
+
+def influence_function(x, a, b, c):
+    try:
+        x = float(x)
+    except ValueError:
+        return 0
+    return log(a*x + 1) * b + c
 
 def is_driver_fault(status_id, statuses):
     bad = [#3, # Accident
