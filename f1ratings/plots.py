@@ -95,7 +95,7 @@ def plot_drivers_rating(drivers, startdate, enddate):
     plt.tight_layout(rect=(0, 0, 0.95, 1))
     return plt
 
-def plot_team_vs_driver_rating(team, driver, startdate, enddate):
+def plot_team_and_driver_rating(team, driver, startdate, enddate):
     team_ratings = []
     for rating in team.ratings:
         if rating[1] is not None:
@@ -125,7 +125,7 @@ def plot_team_vs_driver_rating(team, driver, startdate, enddate):
     plt.tight_layout(rect=(0, 0, 0.95, 1))
     return plt
 
-def plot_teams_vs_drivers(teams, drivers, startdate, enddate):
+def plot_teams_and_drivers(teams, drivers, startdate, enddate):
     team_ratings = {}
     for team in teams:
         team_ratings[team.name] = []

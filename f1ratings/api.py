@@ -10,6 +10,7 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from datetime import datetime
+import pickle
 
 class F1Ratings:
     def __init__(self, linewidth=PLOT_LINEWIDTH, markersize=PLOT_MARKERSIZE, colormap=PLOT_COLORMAP):
@@ -30,6 +31,9 @@ class F1Ratings:
 
     def fetch(self):
         data = fetch_data()
+        if not data:
+            raise ValueError("No data fetched from the source.")
+
         self.drivers = get_drivers(data)
         self.teams = get_teams(data)
         self.races = get_races(data)
@@ -38,12 +42,39 @@ class F1Ratings:
         self.seasons = compile_seasons(self.races)
         self.statuses = get_statuses(data)
 
+        if not self.drivers:
+            raise ValueError("No drivers found in the fetched data.")
+        if not self.teams:
+            raise ValueError("No teams found in the fetched data.")
+        if not self.races:
+            raise ValueError("No races found in the fetched data.")
+        if not self.qualis:
+            raise ValueError("No qualifying sessions found in the fetched data.")
+        if not self.sprints:
+            raise ValueError("No sprints found in the fetched data.")
+        if not self.seasons:
+            raise ValueError("No seasons compiled from the fetched data.")
+        if not self.statuses:
+            raise ValueError("No statuses found in the fetched data.")
+
     def compute(self):
         self.drivers, self.teams = compute_ratings(
             self.seasons, self.drivers, self.teams, self.qualis, self.sprints, self.statuses
         )
 
-    def save_ratings(self):
+    def save(self, name="f1ratings"):
+        with open(f"ratings/{name}.f1", 'wb') as f:
+            pickle.dump(self, f)
+
+    def load(self, name="f1ratings"):
+        with open(f"ratings/{name}.f1", 'rb') as f:
+            obj = pickle.load(f)
+        if not isinstance(obj, F1Ratings):
+            raise ValueError("Loaded object is not an instance of F1Ratings.")
+        self.__dict__.clear()
+        self.__dict__.update(obj.__dict__)
+
+    def dump_ratings(self):
         save_ratings(self.teams, self.drivers)
 
     def print_today_grid(self):
@@ -55,7 +86,7 @@ class F1Ratings:
         plt_drivers = plot_drivers_rating(drivers, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date())
         plt_teams = plot_teams_rating(teams, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date())
         if plt_drivers is None or plt_teams is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt_drivers.show()
         plt_teams.show()
         plt_drivers.close()
@@ -67,7 +98,7 @@ class F1Ratings:
         plt_drivers = plot_drivers_rating(drivers, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date())
         plt_teams = plot_teams_rating(teams, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date())
         if plt_drivers is None or plt_teams is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt_drivers.savefig(f"ratings/{name}_drivers.png", dpi=300)
         plt_teams.savefig(f"ratings/{name}_teams.png", dpi=300)
         plt_drivers.close()
@@ -76,135 +107,159 @@ class F1Ratings:
     def show_plot_driver_rating(self, driver_name, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         driver = get_driver_by_name(self.drivers, driver_name)
         if not driver:
-            return
+            raise ValueError(f"Driver '{driver_name}' not found.")
         plt = plot_driver_rating(driver, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.show()
         plt.close()
 
     def show_plot_drivers_rating(self, driver_names, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         drivers = [get_driver_by_name(self.drivers, name) for name in driver_names]
         if not all(drivers):
-            return
+            for name in driver_names:
+                if not get_driver_by_name(self.drivers, name):
+                    raise ValueError(f"Driver '{name}' not found.")
         plt = plot_drivers_rating(drivers, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.show()
         plt.close()
 
     def show_plot_team_rating(self, team_name, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         team = get_team_by_name(self.teams, team_name)
         if not team:
-            return
+            raise ValueError(f"Team '{team_name}' not found.")
         plt = plot_team_rating(team, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.show()
         plt.close()
 
     def show_plot_teams_rating(self, team_names, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         teams = [get_team_by_name(self.teams, name) for name in team_names]
         if not all(teams):
-            return
+            for name in team_names:
+                if not get_team_by_name(self.teams, name):
+                    raise ValueError(f"Team '{name}' not found.")
         plt = plot_teams_rating(teams, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.show()
         plt.close()
 
-    def show_plot_team_vs_driver(self, team_name, driver_name, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
+    def show_plot_team_and_driver(self, team_name, driver_name, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         team = get_team_by_name(self.teams, team_name)
         driver = get_driver_by_name(self.drivers, driver_name)
-        if not team or not driver:
-            return
-        plt = plot_team_vs_driver_rating(team, driver, startdate, enddate)
+        if not team and not driver:
+            raise ValueError(f"Team '{team_name}' and Driver '{driver_name}' not found.")
+        elif not team:
+            raise ValueError(f"Team '{team_name}' not found.")
+        elif not driver:
+            raise ValueError(f"Driver '{driver_name}' not found.")
+        plt = plot_team_and_driver_rating(team, driver, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.show()
         plt.close()
 
-    def show_plot_teams_vs_drivers(self, team_names, driver_names, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
+    def show_plot_teams_and_drivers(self, team_names, driver_names, startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         teams = [get_team_by_name(self.teams, name) for name in team_names]
         drivers = [get_driver_by_name(self.drivers, name) for name in driver_names]
         if not all(teams) or not all(drivers):
-            return
-        plt = plot_teams_vs_drivers(teams, drivers, startdate, enddate)
+            for name in team_names:
+                if not get_team_by_name(self.teams, name):
+                    raise ValueError(f"Team '{name}' not found.")
+            for name in driver_names:
+                if not get_driver_by_name(self.drivers, name):
+                    raise ValueError(f"Driver '{name}' not found.")
+        plt = plot_teams_and_drivers(teams, drivers, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.show()
         plt.close()
 
     def save_plot_driver_rating(self, driver_name, name="driver_rating_progression", startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         driver = get_driver_by_name(self.drivers, driver_name)
         if not driver:
-            return
+            raise ValueError(f"Driver '{driver_name}' not found.")
         plt = plot_driver_rating(driver, name, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.savefig(f"ratings/{name}.png", dpi=300)
         plt.close()
 
     def save_plot_drivers_rating(self, driver_names, name="drivers_rating_progression", startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         drivers = [get_driver_by_name(self.drivers, name) for name in driver_names]
         if not all(drivers):
-            return
+            for name in driver_names:
+                if not get_driver_by_name(self.drivers, name):
+                    raise ValueError(f"Driver '{name}' not found.")
         plt = plot_drivers_rating(drivers, name, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.savefig(f"ratings/{name}.png", dpi=300)
         plt.close()
 
     def save_plot_team_rating(self, team_name, name="team_rating_progression", startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         team = get_team_by_name(self.teams, team_name)
         if not team:
-            return
+            raise ValueError(f"Team '{team_name}' not found.")
         plt = plot_team_rating(team, name, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.savefig(f"ratings/{name}.png", dpi=300)
         plt.close()
 
     def save_plot_teams_rating(self, team_names, name="teams_rating_progression", startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         teams = [get_team_by_name(self.teams, name) for name in team_names]
         if not all(teams):
-            return
+            raise ValueError("One or more teams not found.")
         plt = plot_teams_rating(teams, name, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.savefig(f"ratings/{name}.png", dpi=300)
         plt.close()
 
-    def save_plot_team_vs_driver(self, team_name, driver_name, name="team_vs_driver_rating_progression", startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
+    def save_plot_team_and_driver(self, team_name, driver_name, name="team_vs_driver_rating_progression", startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         team = get_team_by_name(self.teams, team_name)
         driver = get_driver_by_name(self.drivers, driver_name)
-        if not team or not driver:
-            return
-        plt = plot_team_vs_driver_rating(team, driver, name, startdate, enddate)
+        if not team and not driver:
+            raise ValueError(f"Team '{team_name}' and Driver '{driver_name}' not found.")
+        elif not team:
+            raise ValueError(f"Team '{team_name}' not found.")
+        elif not driver:
+            raise ValueError(f"Driver '{driver_name}' not found.")
+        plt = plot_team_and_driver_rating(team, driver, name, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.savefig(f"ratings/{name}.png", dpi=300)
         plt.close()
 
-    def save_plot_teams_vs_drivers(self, team_names, driver_names, name="teams_vs_drivers_rating_progression", startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
+    def save_plot_teams_and_drivers(self, team_names, driver_names, name="teams_vs_drivers_rating_progression", startdate=datetime(1950, 1, 1).date(), enddate=datetime.now().date()):
         teams = [get_team_by_name(self.teams, name) for name in team_names]
         drivers = [get_driver_by_name(self.drivers, name) for name in driver_names]
         if not all(teams) or not all(drivers):
-            return
-        plt = plot_teams_vs_drivers(teams, drivers, name, startdate, enddate)
+            for name in team_names:
+                if not get_team_by_name(self.teams, name):
+                    raise ValueError(f"Team '{name}' not found.")
+            for name in driver_names:
+                if not get_driver_by_name(self.drivers, name):
+                    raise ValueError(f"Driver '{name}' not found.")
+        plt = plot_teams_and_drivers(teams, drivers, name, startdate, enddate)
         if plt is None:
-            return
+            raise ValueError("No data available for plotting.")
         plt.savefig(f"ratings/{name}.png", dpi=300)
         plt.close()
 
     def print_driver_rating(self, driver_name):
         driver = get_driver_by_name(self.drivers, driver_name)
         if not driver:
-            return
+            raise ValueError(f"Driver '{driver_name}' not found.")
         print_driver_rating(driver)
 
     def print_team_rating(self, team_name):
         team = get_team_by_name(self.teams, team_name)
         if not team:
-            return
+            raise ValueError(f"Team '{team_name}' not found.")
         print_team_rating(team)
