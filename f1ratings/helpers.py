@@ -16,11 +16,12 @@ def distribution_function(x, a, N):
     else:
         return 0
 
-def influence_function(x, a, b, c):
+def influence_function(x, a, b):
     try:
         x = float(x)
     except ValueError:
         return 0
+    c = 1 - b * log(a + 1)
     return log(a*x + 1) * b + c
 
 def is_driver_fault(status_id, statuses):
