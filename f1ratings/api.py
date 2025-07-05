@@ -77,6 +77,14 @@ class F1Ratings:
     def dump_ratings(self):
         save_ratings(self.teams, self.drivers)
 
+    def get_driver_by_name(self, driver_name):
+        driver = get_driver_by_name(self.drivers, driver_name)
+        return driver
+
+    def get_team_by_name(self, team_name):
+        team = get_team_by_name(self.teams, team_name)
+        return team
+
     def print_today_grid(self):
         print_today_grid(self.teams, self.drivers, self.races)
 
