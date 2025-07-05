@@ -32,7 +32,7 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
         if season.year == datetime.now().year:
             season_len = CURRENT_SEASON_LENGTH
         num_races_weight = most_races_in_season / season_len
-        num_races_weight_scaled = influence_function(num_races_weight, a=2.9, b=0.6, c=0.19)
+        num_races_weight_scaled = influence_function(num_races_weight, a=NUM_RACES_INFLUENCE_TREND, b=NUM_RACES_INFLUENCE_STEEPNESS)
 
         for race in season.races:
             print(f"\tComputing ratings for race {race.name}...")
