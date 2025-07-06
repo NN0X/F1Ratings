@@ -15,9 +15,12 @@ def compute_teammate_place_diff(drivers, statuses, driver_id, team_id, position,
     if not teammate_ids:
         return 0
     teammate_positions = [res[2] for res in results if res[0] in teammate_ids]
+    teammate_statuses = [res[3] for res in results if res[0] in teammate_ids]
 
     diffs = []
     for teammate_position in teammate_positions:
+        if not is_driver_fault(teammate_statuses[teammate_positions.index(teammate_position)], statuses):
+            continue
         try:
             teammate_position = int(teammate_position)
         except ValueError:
