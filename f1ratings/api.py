@@ -271,3 +271,15 @@ class F1Ratings:
         if not team:
             raise ValueError(f"Team '{team_name}' not found.")
         print_team_rating(team)
+
+    def print_driver_last_change(self, driver_name):
+        driver = get_driver_by_name(self.drivers, driver_name)
+        if not driver:
+            raise ValueError(f"Driver '{driver_name}' not found.")
+        print_driver_last_change(driver)
+
+    def print_team_last_change(self, team_name):
+        team = get_team_by_name(self.teams, team_name)
+        if not team:
+            raise ValueError(f"Team '{team_name}' not found.")
+        print_team_last_change(team)

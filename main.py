@@ -79,9 +79,24 @@ def print_ratings(f1ratings, args):
                 else:
                     print(f"Team not found.")
 
+def change_ratings(f1ratings, args):
+    if args[1] == "change":
+        if len(args) == 3:
+            driver = f1ratings.get_driver_by_name(args[2])
+            team = f1ratings.get_team_by_name(args[2])
+            if driver is not None:
+                f1ratings.print_driver_last_change(args[2])
+            elif team is not None:
+                f1ratings.print_team_last_change(team.name)
+            else:
+                print(f"Driver or team '{args[2]}' not found.")
+        else:
+            print("Usage: change [name]")
+            print("  name: Name of the driver or team to check last change")
+
 if __name__ == "__main__": 
     if len(sys.argv) > 1:
-        if sys.argv[1] not in ["gen", "load", "dump", "plot", "print"] or sys.argv[1] == "help" or (sys.argv[1] == "plot" and len(sys.argv) < 3) or (sys.argv[1] == "print" and len(sys.argv) < 2):
+        if sys.argv[1] not in ["gen", "load", "dump", "plot", "print", "change"] or sys.argv[1] == "help" or (sys.argv[1] == "plot" and len(sys.argv) < 3) or (sys.argv[1] == "print" and len(sys.argv) < 2):
             print("Usage: python main.py [gen|load|dump|plot [driver_name|team_name]]")
             print("  gen: Generate ratings from scratch")
             print("  dump: Dump ratings to file")
@@ -89,6 +104,7 @@ if __name__ == "__main__":
             print("  plot [name1 name2 ...]: Plot ratings for multiple drivers or teams")
             print("  print [name]: Print ratings for a driver or team")
             print("  print [name1 name2 ...]: Print ratings for multiple drivers or teams")
+            print("  change [name]: Last change in ratings for a driver or team")
             sys.exit(1)
 
         if sys.argv[1] == "gen":
@@ -102,3 +118,4 @@ if __name__ == "__main__":
 
         plot_ratings(f1ratings, sys.argv)
         print_ratings(f1ratings, sys.argv)
+        change_ratings(f1ratings, sys.argv)
