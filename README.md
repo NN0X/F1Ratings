@@ -2,7 +2,7 @@
 Rating system for drivers and teams in F1
 
 ## Description
-My own rating system [XRating](noxsoftware.pl/html/proj/f1ratings) for F1 drivers and teams designed to create somewhat representative ratings and at least try to avoid the "rating inflation" that is common in many rating systems. I would like to note that the rating system is in many ways arbitrary and subjective, and it is not meant to be a definitive measure of a driver's or team's performance. 
+My own rating system [XRating](https://www.noxsoftware.pl/html/proj/f1ratings) for F1 drivers and teams designed to create somewhat representative ratings and at least try to avoid the "rating inflation" that is common in many rating systems. I would like to note that the rating system is in many ways arbitrary and subjective, and it is not meant to be a definitive measure of a driver's or team's performance. 
 
 ## Methodology
 I tuned the system to produce ratings that I believe are reasonable, however I used "unscientific" methods such like finding drivers (de Cesaris, Schumacher, Ascari, Stroll, etc.) and teams (Mercedes, Red Bull, Williams, etc.) that I believe should be placed in a certain range and then adjusting the parameters of the system to achieve that.
