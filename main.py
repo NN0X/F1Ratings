@@ -59,7 +59,7 @@ def print_ratings(f1ratings, args):
             driver = f1ratings.get_driver_by_name(args[2])
             team = f1ratings.get_team_by_name(args[2])
             if driver is not None:
-                f1ratings.print_driver_rating(driver.name)
+                f1ratings.print_driver_rating(f"{driver.forename} {driver.surname}")
             elif team is not None:
                 f1ratings.print_team_rating(team.name)
             else:

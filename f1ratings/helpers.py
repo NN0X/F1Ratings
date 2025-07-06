@@ -71,6 +71,8 @@ def get_last_race_drivers(drivers, races):
         driver = get_driver_by_id(drivers, result[0])
         if driver not in last_race_drivers:
             last_race_drivers.add(driver)
+    if last_race_drivers == set():
+        last_race_drivers = get_last_race_drivers(drivers, races[1:])
     return list(last_race_drivers)
 
 def get_last_race_teams(teams, races):
@@ -81,4 +83,6 @@ def get_last_race_teams(teams, races):
         team = get_team_by_id(teams, result[1])
         if team not in last_race_teams:
             last_race_teams.add(team)
+    if last_race_teams == set():
+        last_race_teams = get_last_race_teams(teams, races[1:])
     return list(last_race_teams)
