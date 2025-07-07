@@ -16,6 +16,18 @@ def distribution_function(x, a, N):
     else:
         return 0
 
+def half_distribution_function(x, a, N):
+    try:
+        x = float(x)
+        a = float(a)
+    except ValueError:
+        return 0
+
+    if x < 0 or x > a:
+        return 0
+    else:
+        return -N * ((x / a) ** 3)
+
 def influence_function(x, a, b):
     try:
         x = float(x)

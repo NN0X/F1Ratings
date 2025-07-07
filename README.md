@@ -19,4 +19,9 @@ This project uses modified [Semantic Versioning](https://semver.org). Versions a
 ## Release Notes
 Release notes are provided latest first.
 
+- v1.0.1-beta (2025-07-07)
+  - Fixed driver teammate difference computation
+  - Changed weights for number of races in a season
+  - Changed config to make sense
+  - I guess Juan Manuel Fangio is the GOAT
 - v1.0.0-beta (2025-07-06)
