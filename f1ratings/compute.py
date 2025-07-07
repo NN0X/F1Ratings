@@ -140,26 +140,26 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
                     diff_team_multiplier_growth = exp(-DIFF_TEAM_GROWTH_WEIGHT * diff_team_performance / BASE_TEAM_RATING)
                     diff_team_multiplier_dumper = exp(DIFF_TEAM_DUMPER_WEIGHT * diff_team_performance / BASE_TEAM_RATING)
 
-                    if diff_team_multiplier_growth < 0.5:
-                        diff_team_multiplier_growth = 0.5
-                    if diff_team_multiplier_dumper < 0.5:
-                        diff_team_multiplier_dumper = 0.5
+                    if diff_team_multiplier_growth < DIFF_TEAM_GROWTH_WEIGHT_MIN:
+                        diff_team_multiplier_growth = DIFF_TEAM_GROWTH_WEIGHT_MIN
+                    if diff_team_multiplier_dumper < DIFF_TEAM_DUMPER_WEIGHT_MIN:
+                        diff_team_multiplier_dumper = DIFF_TEAM_DUMPER_WEIGHT_MIN
 
-                    if diff_team_multiplier_growth > 1.5:
-                        diff_team_multiplier_growth = 1.5
-                    if diff_team_multiplier_dumper > 1.5:
-                        diff_team_multiplier_dumper = 1.5
+                    if diff_team_multiplier_growth > DIFF_TEAM_GROWTH_WEIGHT_MAX:
+                        diff_team_multiplier_growth = DIFF_TEAM_GROWTH_WEIGHT_MAX
+                    if diff_team_multiplier_dumper > DIFF_TEAM_DUMPER_WEIGHT_MAX:
+                        diff_team_multiplier_dumper = DIFF_TEAM_DUMPER_WEIGHT_MAX
 
                     if race_bonus < 0:
-                        race_bonus *= diff_team_multiplier_dumper
+                        race_bonus /= diff_team_multiplier_dumper
                     else:
                         race_bonus *= diff_team_multiplier_growth
                     if quali_bonus < 0:
-                        quali_bonus *= diff_team_multiplier_dumper
+                        quali_bonus /= diff_team_multiplier_dumper
                     else:
                         quali_bonus *= diff_team_multiplier_growth
                     if sprint_bonus < 0:
-                        sprint_bonus *= diff_team_multiplier_dumper
+                        sprint_bonus /= diff_team_multiplier_dumper
                     else:
                         sprint_bonus *= diff_team_multiplier_growth
 
@@ -195,12 +195,12 @@ def compute_ratings(seasons, drivers, teams, qualis, sprints, statuses):
 
                     rating_change = (
                                     + diff_teammates*DIFF_TEAMMATES * rookie_multiplier_diff_teammates
-                                    + race_bonus*RACE_BONUS * rookie_multiplier_race
-                                    + quali_bonus*QUALI_BONUS * rookie_multiplier_quali
+                                    + race_bonus*RACE_BONUS * rookie_multiplier_race * num_races_weight_scaled
+                                    + quali_bonus*QUALI_BONUS * rookie_multiplier_quali * num_races_weight_scaled
                                     + sprint_bonus*SPRINT_BONUS * rookie_multiplier_sprint
                                     + diff_race*DIFF_RACE * rookie_multiplier_diff_race
                                     + diff_sprint*DIFF_SPRINT * rookie_multiplier_diff_sprint
-                                ) * SWING_MULTIPLIER * num_races_weight_scaled - rating_penalty
+                                ) * SWING_MULTIPLIER - rating_penalty
                     new_driver_rating = driver_rating + rating_change - decay
 
                     driver.ratings.append((new_driver_rating, race.date))

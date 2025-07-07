@@ -15,14 +15,15 @@ def compute_teammate_place_diff(drivers, statuses, driver_id, team_id, position,
     if not teammate_ids:
         return 0
     teammate_positions = [res[2] for res in results if res[0] in teammate_ids]
+    teammate_statuses = [res[3] for res in results if res[0] in teammate_ids]
 
     diffs = []
     for teammate_position in teammate_positions:
         try:
             teammate_position = int(teammate_position)
+            diffs.append(teammate_position - position)
         except ValueError:
-            teammate_position = lastPossiblePosition
-        diffs.append(teammate_position - position)
+            diffs.append(0)
 
     expectedScores = [] # elo rating expected scores Ea = 1 / (1 + 10 ** ((teammate_rating - driver_rating) / 400))
     for teammate_id in teammate_ids:
@@ -41,7 +42,7 @@ def compute_teammate_place_diff(drivers, statuses, driver_id, team_id, position,
             sign = -1
         else:
             sign = 1
-        distributed_diff = distribution_function(abs(diff), lastPossiblePosition - 1, 5) * sign
+        distributed_diff = -half_distribution_function(abs(diff), lastPossiblePosition - 1, 5) * sign
         diffs_distributed.append(distributed_diff)
 
     diffs_adjusted = [diff * 2 * expected_score for diff, expected_score in zip(diffs_distributed, expectedScores)]
